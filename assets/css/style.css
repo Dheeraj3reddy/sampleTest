@@ -1,0 +1,14 @@
+.title {
+    font-size: 300%;
+    text-align: center;
+}
+
+.sample-image {
+    width: 80%;
+    margin: 1em auto;
+}
+
+.sample-image img {
+    width: 100%;
+}
+
