@@ -6,11 +6,12 @@ This is an example project for CI/CD pipeline for static assets.
 
 ### Build the project
 1. Clone the project to your local folder.
-2. Install all dependencies.
+2. Install all dependencies:
     ```
     $ cd cdnexample
     $ npm install
     ```
+
 3. Build the project:
     ```
     $ npm run build
@@ -42,23 +43,14 @@ After the project is successfully built, a `dist` directory will be created for 
 ### Preview Website Locally
 Under `cdnexample` folder:
 ```
-$ npm run start
+emanfu-osx:cdnexample emanfu$ npm run start
 
 > cdnexample@1.0.0 start /Users/emanfu/dev/cdnexample
-> cd dist; serve
+> webpack-dev-server
 
-
-   ┌───────────────────────────────────────────────────┐
-   │                                                   │
-   │   Serving!                                        │
-   │                                                   │
-   │   - Local:            http://localhost:3000       │
-   │   - On Your Network:  http://172.31.98.244:3000   │
-   │                                                   │
-   │                                                   │
-   │                                                   │
-   └───────────────────────────────────────────────────┘
-
+Project is running at http://localhost:9000/
+webpack output is served from /
+(lines omitted)
 ```
 
 Then point any browser to http://localhost:3000 to see the web page.
