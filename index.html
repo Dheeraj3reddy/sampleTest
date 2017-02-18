@@ -2,16 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <link type="text/css" rel="stylesheet" href="assets/css/style.css">
+  <title>Static Assets Hello World</title>
+  <link type="text/css" rel="stylesheet" href="main.css">
+  <!--<%=htmlWebpackPlugin.files.webpackManifest%>-->
+  <script src="manifest.js"></script>
+  <script src="vendor.js"></script>
+  <script src="main.js"></script>
 </head>
 <body>
-  <h2 class="title">Hello World!</h2>
+  <h2 class="title"></h2>
+  <div class="image-info"></div>
   <div class="sample-image">
-    <img src="assets/images/Bethoven.png">
+    <img src="./app/images/Bethoven.png">
   </div>
   <div class="sample-image">
-    <img src="assets/images/obama-signature.jpg">
+    <img src="./app/images/obama-signature.jpg">
   </div>
 </body>
 </html>
