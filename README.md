@@ -53,5 +53,5 @@ webpack output is served from /
 (lines omitted)
 ```
 
-Then point any browser to http://localhost:3000 to see the web page.
+Then point any browser to http://localhost:9000 to see the web page.
 
