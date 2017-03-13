@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "clean": "grunt clean-all",
-    "build": "grunt clean-all; webpack",
+    "build": "grunt build",
+    "builddev": "grunt build-dev",
     "start": "webpack-dev-server",
     "watch": "webpack --progress --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,15 +19,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "css-loader": "^0.26.1",
-    "extract-loader": "^0.1.0",
-    "extract-text-webpack-plugin": "^2.0.0-rc.3",
-    "file-loader": "^0.10.0",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.0.0",
-    "html-loader": "^0.4.4",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-env": "^0.4.4",
+    "grunt-webpack": "^2.0.1",
     "load-grunt-tasks": "^3.5.2",
-    "style-loader": "^0.13.1",
     "underscore": "^1.8.3",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"

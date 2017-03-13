@@ -1,7 +1,10 @@
-*.iml
-.idea
+# Don't add "dist" from the source. We'll build our own.
 dist
+
 node_modules
+.idea
+*.iml
+Makefile
 
 # Shannon's test scripts
 run-s3-image
