@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
     jQuery('.language-selector').change(function() {
         var lang = jQuery('.language-selector').val();
         startApp(lang);
-    })
+    });
 
     startApp('en_US');
 });

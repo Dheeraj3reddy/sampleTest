@@ -141,5 +141,12 @@ Therefore, in your HTML file (if you have one), you just need to reference `main
 ...(lines omitted)
 ```
 
+In your application's javascript file, always use `require(otherFile)` or `import "module/lib/file"` to reference another jsvscript file like this:
+```javascript
+var lib = require('./lib.js');
+var jQuery = require('jquery');
+var UiStrings = require('./nls/ui-strings');
+```
+
 ## Localization Support
 This project is using the localization solution stated in the following Wiki page: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
