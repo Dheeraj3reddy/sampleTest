@@ -1,6 +1,6 @@
 /*global require */
 
-var Promise = require('es6-promise').Promise
+var Promise = require('es6-promise').Promise;
 
 var loadedBundle = null;
 

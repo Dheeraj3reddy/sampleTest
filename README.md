@@ -2,11 +2,8 @@
 
 This is a starter project for onboarding to the CI/CD pipeline for static content.
 
-### Clone the project and create a new repository
-First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name.
-The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of
-the original services which might already be using dashes. Throughout this document we will refer to this name as
-&lt;servicename&gt;.
+## Clone the project and create a new repository
+First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name. The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of the original services which might already be using dashes. Throughout this document we will refer to this name as `<servicename>`.
 ```
 $ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>-cdn
 Cloning into '<servicename>-cdn'...
@@ -22,22 +19,22 @@ Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/
 
 Now push your project to a new git repo with the name `<servicename>-cdn`.
 
-### Build the project
+## Build the project
 1. Install dependencies:
     ```
     $ cd <servicename>-cdn
     $ npm install
     ```
 
-3. Build the project:
+2. Build the project. To build the project in release mode (javascript is minified):
     ```
     $ npm run build
 
-    > <servicename>-cdn@1.0.0 build /Users/shickey/Workspaces/<servicename>-cdn
+    > cdnexample@0.1.0 build /Users/emanfu/dev/cdnexample
     > grunt build
 
     Running "clean:build" (clean) task
-    >> 0 paths cleaned.
+    >> 12 paths cleaned.
 
     Running "copy:top_level" (copy) task
     Copied 1 file
@@ -45,7 +42,7 @@ Now push your project to a new git repo with the name `<servicename>-cdn`.
     Running "copy:assets" (copy) task
     Created 2 directories, copied 4 files
 
-    Running "webpack:build" (webpack) task                                                          Version: webpack 2.2.1
+    Running "webpack:build" (webpack) task
                   Asset       Size  Chunks             Chunk Names
        __VERSION__/0.js   89 bytes       0  [emitted]  js/nls/root/ui-strings
        __VERSION__/1.js  102 bytes       1  [emitted]  js/nls/fr_FR/ui-strings
@@ -54,9 +51,12 @@ Now push your project to a new git repo with the name `<servicename>-cdn`.
     Done.
 
     ```
+    To build the project in development mode (javascript is not minified):
+    ```
+    $ npm run builddev
+    ```
 
-Building the project creates a `dist` directory containing all of the assets in your project. This directory reflects
-what will be uploaded to S3 when it is built and deployed by the static pipeline. When deployed:
+Building the project creates a `dist` directory containing all of the assets in your project. This directory reflects what will be uploaded to S3 when it is built and deployed by the static pipeline. When deployed:
 
 * Assets directly under `dist` are your top-level assets and are deployed with a very short cache age (1 minute).
 * Assets under `dist/__VERSION__` are deployed with a new unique folder name on each deployment. They are given
@@ -64,28 +64,82 @@ what will be uploaded to S3 when it is built and deployed by the static pipeline
 
 You can control what files go where via `Gruntfile.js`
 
-### Preview Website Locally
+## Preview Website Locally
 Under `<servicename>-cdn` folder:
 ```
 $ npm run start
 
-> <servicename>-cdn@1.0.0 start /Users/shickey/Workspaces/<servicename>-cdn
+> cdnexample@0.1.0 start /Users/emanfu/dev/cdnexample
 > webpack-dev-server
 
 Project is running at http://localhost:9000/
 webpack output is served from /
+Content not from webpack is served from /Users/emanfu/dev/cdnexample/dist
+Hash: cbf2996748090aefe5b5
+Version: webpack 2.2.1
+Time: 933ms
 
 ```
 
 Then point any browser to http://localhost:9000 to see the web page.
 
-### Working with paths
-All paths used in your source files must be relative. How your project is deployed might change over time
-(example `https://static.echocdn.com/<yourservice>` vs. `https://<youservice>.echocdn.com`) and this means you can
-never assume the positioning of your content with respect to the root.
+## Working with Paths
+All paths used in your source files must be relative. How your project is deployed might change over time (example `https://static.echocdn.com/<yourservice>` vs. `https://<youservice>.echocdn.com`) and this means you can never assume the positioning of your content with respect to the root.
 
-As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on
-each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source
-files. During deployment, this string is replaced in all source files (with extensions `*.htm`, `*.html`, `*.css`, `*.js`, `*.json`
-with the correct folder name. If you need to support additional extensions, you can add to the list in
+As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source files. During deployment, this string is replaced in all source files (with extensions `*.htm`, `*.html`, `*.css`, `*.js`, `*.json` with the correct folder name. If you need to support additional extensions, you can add to the list in
 `deploy-scripts/pre-process-dist.sh` but please reach out to Eman Fu or Shannon Hickey to also add to the template.
+
+## Modify Build-Related Files
+The template project use [Webpack 2](https://webpack.js.org/) and [Grunt](https://gruntjs.com/) for code packaging and build management. You will most likely need to modify `webpack.config.js` and `Gruntfile.js` for your own need.
+
+You can use as many webpack features as you want, or even use your own code management/packaging solution like Require.js, or build tool like Gulp or even Makefile, but whatever you use to build your project, please make sure:
+
+ 1. Hook your build system up with npm and make sure your build will start with the command `npm run build`, since the docker files in this template project assume the project build is kicked off with `npm run build`.
+ 2. Your top-level files, which will have short cache age, has to be placed directly under `/dist`, and the asset files that need to have long cache age should be placed in `/dist/__VERSION__`. This will ensure your files will be pushed to the S3 bucket correctly with the desired caching policy.
+
+### `Gruntfile.js`
+The template project use Grunt as our build system. The asset files other than javascript are copied to the right locations with Grunt tasks defined in `Gruntfile.js`. Please take a look at the file and make necessary changes if your project is not structured like this template project.
+
+### `webpack.config.js`
+This project doesn't use much of the webpack features. The primary features used is javascript code bundling, which combines all your app's and 3rd-party javascript files into one minified javascript file, and the webpack dev server for serving the static content locally.
+
+Based on your application structure, you will need to determine which javascript file is your **entry-point** file, from which you will reference other javascript files, which reference yet another javascript files. All the files in the reference tree will be combined together into a single `main.js` file.
+```javascript
+var path = require('path');
+
+module.exports = {
+  entry: {
+    // depending on what your project's entry point javascript file is,
+    // you will need to moodify the following line.
+    main: './js/app.js'
+  },
+  output: {
+    filename: '__VERSION__/[name].js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  devtool  : 'inline-source-map',
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    port: 9000,
+    publicPath: '/'
+  }
+};
+```
+
+Therefore, in your HTML file (if you have one), you just need to reference `main.js` instead of every single javascript files:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Static Assets Hello World</title>
+  <base href="__VERSION__/">
+  ...
+  <script src="main.js"></script>
+</head>
+<body>
+...(lines omitted)
+```
+
+## Localization Support
+This project is using the localization solution stated in the following Wiki page: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
