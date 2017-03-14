@@ -13,13 +13,13 @@ remote: Counting objects: 435, done.
 remote: Total 435 (delta 0), reused 0 (delta 0), pack-reused 434
 Receiving objects: 100% (435/435), 56.03 KiB | 0 bytes/s, done.
 Resolving deltas: 100% (201/201), done.
-$ cd yourservicename-cdn/
+$ cd <servicename>-cdn/
 $ rm -rf .git
 $ git init
 Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/.git/
 ```
 
-Now push your project to git.
+Now push your project to a new git repo with the name <servicename>-cdn.
 
 ### Build the project
 1. Install all dependencies:
@@ -30,32 +30,36 @@ Now push your project to git.
 
 3. Build the project:
     ```
-    $ npm run build
+    shanbook3:cdnexample shickey$ npm run build
 
-    > cdnexample@1.0.0 build /Users/emanfu/dev/<servicename>-cdn
-    > webpack
+    > cdnexample@1.0.0 build /Users/shickey/Workspaces/cdnexample
+    > grunt build
 
-    > Replacing "main.js" with ""assets/main-88851569af523a5d8d0e.js"" in index.html
-    > Replacing "main.css" with ""assets/main-88851569af523a5d8d0e.css"" in index.html
-    > Replacing "vendor.js" with ""assets/vendor-a8180f14003db6ee1ab9.js"" in index.html
-    > Replacing "manifest.js" with ""assets/manifest-0789f024bbcd91ba658b.js"" in index.html
-    Hash: 66666756698933ba47b1
-    Version: webpack 2.2.1
-    Time: 1129ms
-                                                            Asset       Size  Chunks                    Chunk Names
-           ./assets/Bethoven-5fd10b131af61686e7b41422da332043.png    52.2 kB          [emitted]
-    ./assets/obama-signature-d189f34de68b39bd6994b33cb21ddb41.jpg    35.3 kB          [emitted]
+    Running "clean:build" (clean) task
+    >> 0 paths cleaned.
 
-    (lines omitted)
+    Running "copy:top_level" (copy) task
+    Copied 1 file
+
+    Running "copy:assets" (copy) task
+    Created 2 directories, copied 4 files
+
+    Running "webpack:build" (webpack) task                                                          Version: webpack 2.2.1
+                  Asset       Size  Chunks             Chunk Names
+       __VERSION__/0.js   89 bytes       0  [emitted]  js/nls/root/ui-strings
+       __VERSION__/1.js  102 bytes       1  [emitted]  js/nls/fr_FR/ui-strings
+    __VERSION__/main.js     115 kB       2  [emitted]  main
+
+    Done.
 
     ```
 
 Building the project creates a `dist` directory containing all of the assets in your project. This directory reflects
-what will be uploaded to S3 when you have onboarded to the deployment pipeline.
+what will be uploaded to S3 when it is built and deployed by the static pipeline.
 
-* The files `./dist/*` are supposed to have very short cache age.
-* The files `./dist/assets/*` are supposed to have long cache age.
-
+* Assets directly under ./dist are your top-level assets and are deployed with a very short cache age (1 minute).
+* Assets under ./dist/__VERSION__ are deployed via a new folder with unique hash ID on each deployment. They are given
+  a longer cache age (1 day).
 
 ### Preview Website Locally
 Under `cdnexample` folder:
