@@ -6,9 +6,9 @@ var lib = require('./lib.js');
 var jQuery = require('jquery');
 var UiStrings = require('./nls/ui-strings');
 
-// Need to setup path at runtime, otherwise by default /__VERSION__/__VERSIOM__/1.js will be used,
-// because we use base href='__VERSION__' I suspect
-__webpack_public_path__ = "/";
+// Need to setup path at runtime, otherwise by default /__VERSION__/__VERSIOM__/1.js will be used because we use base href='__VERSION__'
+// Use relative ../ path to make sure it works locally and when deployed to CDN
+__webpack_public_path__ = "../";
 
 jQuery(document).ready(function() {
     jQuery('.language-selector').change(function() {
