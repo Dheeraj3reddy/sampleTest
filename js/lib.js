@@ -7,7 +7,7 @@ var _ = require('underscore');
 var UiStrings = require('./nls/ui-strings');
 
 function sayHello() {
-  // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadLanguage()
+  // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadTranslations()
   jQuery('.title').html(UiStrings.getTranslatedString('MESSAGE1'));
 }
 
