@@ -4,9 +4,11 @@
 
 var jQuery = require('jquery');
 var _ = require('underscore');
+var UiStrings = require('./nls/ui-strings');
 
 function sayHello() {
-  jQuery('.title').html('Hello World, Static Assets!');
+  // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadLanguage()
+  jQuery('.title').html(UiStrings.getTranslatedString('MESSAGE1'));
 }
 
 function showImageInfo() {
