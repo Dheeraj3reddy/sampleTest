@@ -81,11 +81,11 @@ Then point any browser to http://localhost:9000 to see the web page.
 
 ### Working with paths
 All paths used in your source files must be relative. How your project is deployed might change over time
-(example `https://static.echocdn.com/<yourservice>`` vs. `https://<youservice>.echocdn.com`) and this means you can
+(example `https://static.echocdn.com/<yourservice>` vs. `https://<youservice>.echocdn.com`) and this means you can
 never assume the positioning of your content with respect to the root.
 
 As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on
 each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source
-files. During deployment, this string is replaced in all source files (with extensions `*.htm, *.html, *.css, *.js, *.json`
+files. During deployment, this string is replaced in all source files (with extensions `*.htm`, `*.html`, `*.css`, `*.js`, `*.json`
 with the correct folder name. If you need to support additional extensions, you can add to the list in
 `deploy-scripts/pre-process-dist.sh` but please reach out to Eman Fu or Shannon Hickey to also add to the template.
