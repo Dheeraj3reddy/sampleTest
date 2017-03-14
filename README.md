@@ -30,9 +30,9 @@ Now push your project to a new git repo with the name <servicename>-cdn.
 
 3. Build the project:
     ```
-    shanbook3:cdnexample shickey$ npm run build
+    $ npm run build
 
-    > cdnexample@1.0.0 build /Users/shickey/Workspaces/cdnexample
+    > <servicename>-cdn@1.0.0 build /Users/shickey/Workspaces/<servicename>-cdn
     > grunt build
 
     Running "clean:build" (clean) task
@@ -62,16 +62,16 @@ what will be uploaded to S3 when it is built and deployed by the static pipeline
   a longer cache age (1 day).
 
 ### Preview Website Locally
-Under `cdnexample` folder:
+Under `<servicename>-cdn` folder:
 ```
-emanfu-osx:cdnexample emanfu$ npm run start
+$ npm run start
 
-> cdnexample@1.0.0 start /Users/emanfu/dev/cdnexample
+> <servicename>-cdn@1.0.0 start /Users/shickey/Workspaces/<servicename>-cdn
 > webpack-dev-server
 
 Project is running at http://localhost:9000/
 webpack output is served from /
-(lines omitted)
+
 ```
 
 Then point any browser to http://localhost:9000 to see the web page.
