@@ -5,7 +5,8 @@ This is a starter project for onboarding to the CI/CD pipeline for static conten
 ### Clone the project and create a new repository
 First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name.
 The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of
-the original services which might already be using dashes.
+the original services which might already be using dashes. Throughout this document we will refer to this name as
+<servicename>.
 ```
 $ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>-cdn
 Cloning into '<servicename>-cdn'...
