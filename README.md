@@ -8,7 +8,7 @@ The name should be in the form `servicename`, without camel case, underscores or
 the original services which might already be using dashes. Throughout this document we will refer to this name as
 &lt;servicename&gt;.
 ```
-$ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git &lt;servicename&gt;-cdn
+$ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>-cdn
 Cloning into '<servicename>-cdn'...
 remote: Counting objects: 435, done.
 remote: Total 435 (delta 0), reused 0 (delta 0), pack-reused 434
@@ -20,7 +20,7 @@ $ git init
 Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/.git/
 ```
 
-Now push your project to a new git repo with the name <servicename>-cdn.
+Now push your project to a new git repo with the name &lt;servicename&gt;-cdn.
 
 ### Build the project
 1. Install all dependencies:
