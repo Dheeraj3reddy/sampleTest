@@ -8,6 +8,7 @@ module.exports = {
   },
   output: {
     filename: '__VERSION__/[name].js',
+    chunkFilename: '__VERSION__/nls/translations_[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   devtool  : 'inline-source-map',
