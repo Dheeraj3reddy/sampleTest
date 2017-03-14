@@ -1,14 +1,30 @@
 # cdnexample
 
-This is an example project for CI/CD pipeline for static assets.
+This is a starter project for onboarding to the CI/CD pipeline for static content.
 
-## Dev Setup
+### Clone the project and create a new repository
+First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name.
+The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of
+the original services which might already be using dashes.
+```
+$ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>-cdn
+Cloning into '<servicename>-cdn'...
+remote: Counting objects: 435, done.
+remote: Total 435 (delta 0), reused 0 (delta 0), pack-reused 434
+Receiving objects: 100% (435/435), 56.03 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (201/201), done.
+$ cd yourservicename-cdn/
+$ rm -rf .git
+$ git init
+Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/.git/
+```
+
+Now push your project to git.
 
 ### Build the project
-1. Clone the project to your local folder.
-2. Install all dependencies:
+1. Install all dependencies:
     ```
-    $ cd cdnexample
+    $ cd <servicename>-cdn
     $ npm install
     ```
 
@@ -16,7 +32,7 @@ This is an example project for CI/CD pipeline for static assets.
     ```
     $ npm run build
 
-    > cdnexample@1.0.0 build /Users/emanfu/dev/cdnexample
+    > cdnexample@1.0.0 build /Users/emanfu/dev/<servicename>-cdn
     > webpack
 
     > Replacing "main.js" with ""assets/main-88851569af523a5d8d0e.js"" in index.html
@@ -34,7 +50,8 @@ This is an example project for CI/CD pipeline for static assets.
 
     ```
 
-After the project is successfully built, a `dist` directory will be created for all the files to be uploaded to S3.
+Building the project creates a `dist` directory containing all of the assets in your project. This directory reflects
+what will be uploaded to S3 when you have onboarded to the deployment pipeline.
 
 * The files `./dist/*` are supposed to have very short cache age.
 * The files `./dist/assets/*` are supposed to have long cache age.
