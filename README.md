@@ -56,11 +56,13 @@ Now push your project to a new git repo with the name `<servicename>-cdn`.
     ```
 
 Building the project creates a `dist` directory containing all of the assets in your project. This directory reflects
-what will be uploaded to S3 when it is built and deployed by the static pipeline.
+what will be uploaded to S3 when it is built and deployed by the static pipeline. When deployed:
 
-* Assets directly under ./dist are your top-level assets and are deployed with a very short cache age (1 minute).
-* Assets under ./dist/__VERSION__ are deployed via a new folder with unique hash ID on each deployment. They are given
+* Assets directly under `dist` are your top-level assets and are deployed with a very short cache age (1 minute).
+* Assets under `dist/__VERSION__` are deployed with a new unique folder name on each deployment. They are given
   a longer cache age (1 day).
+
+You can control what files go where via `Gruntfile.js`
 
 ### Preview Website Locally
 Under `<servicename>-cdn` folder:
@@ -77,3 +79,13 @@ webpack output is served from /
 
 Then point any browser to http://localhost:9000 to see the web page.
 
+### Working with paths
+All paths used in your source files must be relative. How your project is deployed might change over time
+(example `https://static.echocdn.com/<yourservice>`` vs. `https://<youservice>.echocdn.com`) and this means you can
+never assume the positioning of your content with respect to the root.
+
+As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on
+each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source
+files. During deployment, this string is replaced in all source files (with extensions `*.htm, *.html, *.css, *.js, *.json`
+with the correct folder name. If you need to support additional extensions, you can add to the list in
+`deploy-scripts/pre-process-dist.sh` but please reach out to Eman Fu or Shannon Hickey to also add to the template.
