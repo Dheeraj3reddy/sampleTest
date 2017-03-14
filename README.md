@@ -20,7 +20,7 @@ $ git init
 Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/.git/
 ```
 
-Now push your project to a new git repo with the name &lt;servicename&gt;-cdn.
+Now push your project to a new git repo with the name ``&lt;servicename&gt;-cdn`.
 
 ### Build the project
 1. Install all dependencies:
