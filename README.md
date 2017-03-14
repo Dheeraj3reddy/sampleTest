@@ -149,4 +149,37 @@ var UiStrings = require('./nls/ui-strings');
 ```
 
 ## Localization Support
-This project is using the localization solution stated in the following Wiki page: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
+Localization is handled by the code and json bundles located under js/nls folder. You need to follow these steps for localizing your project:
+
+ 1. Place strings that needs to be localized into js/nls/root/ui-strings.json file (this file corresponds to en_US locale), that provides simple key = value format.
+ 2. To load localized strings, you need to use js/nls/ui-strings.js module, for example, assuming you know what locale you need to load, at the main entry to your app add the following code:
+ ```javascript
+   // import the module
+   var UiStrings = require('./nls/ui-strings');
+   // load locale specific translations, 'lang' variable can 
+   UiStrings.loadTranslations(lang).then(function() {
+        // can start using UiStrings.getTranslatedString('key') method now
+   });
+ ```
+ 3. Now you can similarly use this ui-strings.js method in other modules, assuming that above code is executed and the promise returned from loadTranslations() is resovled:
+  ```javascript
+    // import the module
+    var UiStrings = require('./nls/ui-strings');
+
+    // get translated string
+    var translatedMessage = UiStrings.getTranslatedString('MESSAGE1');
+  ```
+ 4. If you are using index.html with base tag (as provided in this cdnexample project) you also need to adjsut webpack public path to account for the fact that base tag would confuse webpack code splititng mechanism and will try use double '__VERSION__/__VERSION__/' path. So somewhere at the root of your app add the following line (if you don't use html/base tag this step can be skipped, TBD - test it):
+  ```javascript
+    __webpack_public_path__ = '../';
+  ```
+ 5. On-board your project with localization team:
+    *   contact Rob Jaworski <jaworski@adobe.com> and John Nguyen <jonguyen@adobe.com> and provide the following info
+    *   What git/branch needs to be monitoring?  - Most likely you want to use Master branch if following CI/CD process
+    *   How changes should be pushed back (direct checkin or a pull request)?  - Most likely you want to use a pull request method.
+    *   You also will need to grant write access of your github to "walf" utility account (and to Jon Nguyen)
+    
+ Note that usual timeline for localization to come back is about week (They usually send out the strings for translation every Friday's night and get the translation back by the following Wednesday's morning).
+ 
+ 
+  This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
