@@ -72,16 +72,23 @@ $ npm run start
 > cdnexample@0.1.0 start /Users/emanfu/dev/cdnexample
 > webpack-dev-server
 
-Project is running at http://localhost:9000/
+Hash: 2e984ba7a2882764d29f
+Version: webpack 2.2.1
+Time: 928ms
+
+... (lines omitted)
+Project is running at https://secure.local.echocdn.com:9000/
 webpack output is served from /
 Content not from webpack is served from /Users/emanfu/dev/cdnexample/dist
-Hash: cbf2996748090aefe5b5
-Version: webpack 2.2.1
-Time: 933ms
+
 
 ```
 
-Then point any browser to http://localhost:9000 to see the web page.
+Then point any browser to https://secure.local.echocdn.com:9000/ to see the web page. Please note that if you have echosign local server configured in your machine, you probably already have the host name entry secure.local.echocdn.com in your `/etc/hosts` file. If your browser complains that the host's DNS address cannot be resolved, you will have to add the following line into your `/etc/hosts` file:
+```
+127.0.0.1 secure.local.echocdn.com
+```
+
 
 ## Working with Paths
 All paths used in your source files must be relative. How your project is deployed might change over time (example `https://static.echocdn.com/<yourservice>` vs. `https://<youservice>.echocdn.com`) and this means you can never assume the positioning of your content with respect to the root.
@@ -183,3 +190,51 @@ Localization is handled by the code and json bundles located under js/nls folder
  
  
   This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
+
+## HTTPS Support
+### Disable/Enable HTTPS Support
+By default, this sample project support HTTPS when you run the server locally. You can see the following settings for `devServer` in `webpack.config.js`:
+```javascript
+  ...
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    port: 9000,
+    publicPath: '/',
+
+    // comment out the following 3 lines if you don't want HTTPS support
+    https: true,
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync('cert.pem')
+  }
+```
+
+if you don't want the HTTPS suuport, simply comment out the 3 properties: `https`, `key`, and `cert`.
+
+### Update SSL Certificate
+The project uses the same certificate used by the local echosign server. If you find the certificate included in the repo has been out dated, you can update the certificate from the keystore used by the local echosign server with the following steps, assuming the certificate stored in the local echosign server has not expired.
+
+1. Run the following command right under the project root folder:
+    ```
+    $ keytool -v -importkeystore -srckeystore <echosign_project_root>/src/echosign/etc/tomcat_ssl_keystore -srcalias tomcat -destkeystore local.p12 -deststoretype PKCS12
+    Enter destination keystore password:
+    Re-enter new password:
+    Enter source keystore password:
+    [Storing local.p12]
+    ```
+    When you are asked the destination keystore password, you can use any password you want, please be sure to remember it since you will need it later. The source keystore password is `changeit`.
+
+2. Run the following command to export the private key file. You'll need to enter the password you typed for the destination keystore.
+    ```
+    $ openssl pkcs12 -in local.p12 -nocerts -nodes -out key.pem
+    Enter Import Password:
+    MAC verified OK
+    ```
+
+3. Run the following command to export the certificate file. You'll need to enter the password you typed for the destination keystore.
+    ```
+    $ openssl pkcs12 -in local.p12  -nokeys -out cert.pem
+    Enter Import Password:
+    MAC verified OK
+    ```
+
+4. Now you have the new `key.pem` and `cert.pem` files. You can delete the `local.p12` file.

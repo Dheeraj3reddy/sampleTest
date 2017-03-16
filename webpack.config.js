@@ -1,4 +1,5 @@
 var path = require('path');
+var fs = require('fs');
 
 module.exports = {
   entry: {
@@ -15,6 +16,12 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "dist"),
     port: 9000,
-    publicPath: '/'
+    publicPath: '/',
+    host: 'secure.local.echocdn.com',
+
+    // comment out the following 3 lines if you don't want HTTPS support
+    https: true,
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync('cert.pem')
   }
 };
