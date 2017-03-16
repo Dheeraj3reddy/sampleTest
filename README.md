@@ -159,8 +159,9 @@ var UiStrings = require('./nls/ui-strings');
 Localization is handled by the code and json bundles located under js/nls folder. You need to follow these steps for localizing your project:
 
  1. Place strings that needs to be localized into js/nls/root/ui-strings.json file (this file corresponds to en_US locale), that provides simple key = value format.
- 2. To load localized strings, you need to use js/nls/ui-strings.js module, for example, assuming you know what locale you need to load, at the main entry to your app add the following code:
+ 2. To load localized strings, you need to use js/nls/ui-strings.js module, for example, assuming you know what locale you need to load, at the main entry of your app add the following code:
  ```javascript
+ 
    // import the module
    var UiStrings = require('./nls/ui-strings');
    // load locale specific translations, 'lang' variable can 
@@ -177,7 +178,9 @@ Localization is handled by the code and json bundles located under js/nls folder
     var translatedMessage = UiStrings.getTranslatedString('MESSAGE1');
   ```
  4. If you are using index.html with base tag (as provided in this cdnexample project) you also need to adjsut webpack public path to account for the fact that base tag would confuse webpack code splititng mechanism and will try use double '__VERSION__/__VERSION__/' path. So somewhere at the root of your app add the following line (if you don't use html/base tag this step can be skipped, TBD - test it):
+
   ```javascript
+
     __webpack_public_path__ = '../';
   ```
  5. On-board your project with localization team:
