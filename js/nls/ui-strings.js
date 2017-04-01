@@ -7,7 +7,7 @@
  *  - at run time, provides loadTranslations() method that lazy load locale and helper method to get translated string by key
  */
 
-/*global require */
+/* global require, module */
 
 var Promise = require('es6-promise').Promise;
 
@@ -21,13 +21,13 @@ var loadedTranslations = null;
  * @returns {Promise} the promise that is resolved when translated file is loaded and getTranslatdString can be used.
  */
 function loadTranslations(locale) {
-    var loc  = (locale === "en_US") ? "root"  : locale;
-    return new Promise(function(resolve) {
-        require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json')(function(jsonBundle) {
-            loadedTranslations = jsonBundle;
-            resolve(jsonBundle);
-        });
+  var loc = (locale === 'en_US') ? 'root' : locale;
+  return new Promise(function (resolve) {
+    require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json')(function (jsonBundle) {
+      loadedTranslations = jsonBundle;
+      resolve(jsonBundle);
     });
+  });
 }
 
 /**
@@ -35,12 +35,13 @@ function loadTranslations(locale) {
  * @param {String} key that identifies translated string
  * @returns {String} translated string
  */
-function getTranslatedString (key) {
-    if (loadedTranslations)
-        return loadedTranslations[key];
+function getTranslatedString(key) {
+  if (loadedTranslations) {
+    return loadedTranslations[key];
+  }
 }
 
 module.exports = {
-    loadTranslations: loadTranslations,
-    getTranslatedString: getTranslatedString
+  loadTranslations: loadTranslations,
+  getTranslatedString: getTranslatedString
 };

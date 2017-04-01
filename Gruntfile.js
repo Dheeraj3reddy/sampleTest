@@ -3,11 +3,6 @@ var webpack = require("webpack"),
 
 module.exports = function (grunt) {
 
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks("grunt-webpack");
-  grunt.loadNpmTasks('grunt-env');
-
   grunt.initConfig({
     clean: {
       build: ["dist/**"]
@@ -52,7 +47,21 @@ module.exports = function (grunt) {
       "build-dev": {
         devtool: "inline-source-map"
       }
+    },
+
+    karma: {
+      unit: {
+        configFile: './karma.conf.js'
+      }
     }
+  });
+
+  // Load Grunt task modules (prefixed with 'grunt-'):
+  require('load-grunt-tasks')(grunt, {
+    pattern: [
+      'grunt-*',
+      '!grunt-timer'
+    ]
   });
 
   grunt.registerTask('clean-all', ['clean:build']);
@@ -71,5 +80,9 @@ module.exports = function (grunt) {
     "copy:top_level",
     "copy:assets",
     "webpack:build-dev"
+  ]);
+
+  grunt.registerTask('test', [
+    'karma:unit'
   ]);
 };

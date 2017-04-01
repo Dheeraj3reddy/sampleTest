@@ -1,13 +1,18 @@
-FROM docker-asr-release.dr.corp.adobe.com/asr/nodejs-v6:1.0-alpine
+FROM docker-asr-release.dr.corp.adobe.com/asr/nodejs-v7:1.0
 
 COPY package.json package.json
 COPY .npmrc .npmrc
+
+RUN apt-get update
+RUN apt-get install -y bzip2 git libfontconfig1
 
 RUN npm install
 
 COPY . .
 
 RUN npm run build
+
+RUN npm run test
 
 ARG PATH_PREFIX=""
 

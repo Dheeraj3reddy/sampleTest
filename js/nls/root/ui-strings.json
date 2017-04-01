@@ -1,3 +1,4 @@
 {
-  "MESSAGE1": "Hello World, Static Assets!"
+  "helloWorldMsg": "Hello World, Static Assets!",
+  "imageInfoMsg": "We have <span>{numImages}</span> images:"
 }

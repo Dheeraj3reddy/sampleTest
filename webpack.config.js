@@ -7,6 +7,23 @@ module.exports = {
     // you will need to moodify the following line.
     main: './js/app.js'
   },
+
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: true,
+          failOnWarning: false,
+          failOnError: true
+        }
+      }
+    ]
+  },
+
   output: {
     filename: '__VERSION__/[name].js',
     chunkFilename: '__VERSION__/nls/translations_[name].js',
@@ -15,6 +32,13 @@ module.exports = {
   devtool  : 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, "dist"),
+
+    // overlay: true captures only errors
+    overlay: {
+      errors: true,
+      warnings: true,
+    },
+
     port: 9000,
     publicPath: '/',
     host: 'secure.local.echocdn.com',
