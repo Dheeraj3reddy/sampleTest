@@ -36,7 +36,7 @@ module.exports = {
     // overlay: true captures only errors
     overlay: {
       errors: true,
-      warnings: true,
+      warnings: true
     },
 
     port: 9000,

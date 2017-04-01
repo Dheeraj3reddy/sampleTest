@@ -1,3 +1,4 @@
 {
-  "helloWorldMsg": "Bonjour tout le monde, actifs statiques!"
+  "helloWorldMsg": "Bonjour tout le monde, actifs statiques!",
+  "imageInfoMsg": "Nous avons <span>{numImages}</span> images:"
 }

@@ -6,9 +6,9 @@
 // this is for supressing the eslint errors caused by setting __webpack_public_path__
 /* eslint no-unused-vars: 0, no-global-assign: 0 */
 
-var lib = require('./lib.js');
-var jQuery = require('jquery');
-var UiStrings = require('./nls/ui-strings');
+var lib = require('./lib.js'),
+  jQuery = require('jquery'),
+  UiStrings = require('./nls/ui-strings');
 
 // Need to setup path at runtime, otherwise by default /__VERSION__/__VERSIOM__/nsl/translations_xx.js will be used
 // because webpack stores path to translated file in a form '__VERSION__/nsl/translation_xx.js' plus example html uses
