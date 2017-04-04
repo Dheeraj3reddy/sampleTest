@@ -323,6 +323,7 @@ The project use the following frameworks for unit tests:
     ✔ 4 tests completed
 
     Done.
+    ```
 
 ### Run Unit Tests in CI/CD Process
 If you copied `cdnexample` after the unit test support was added, your unit tests will run when a PR is created (make-ci job) and in the Build step when you depoy your project in Moonbeam. If your project was created before the unit test support was created, please copy the latest `Dockerfile.build` file into your project to replace the old one.
