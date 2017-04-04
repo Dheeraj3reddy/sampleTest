@@ -1,11 +1,13 @@
-var webpack = require("webpack"),
-  webpackConfig = require("./webpack.config.js");
+/* eslint-env node */
+
+var webpack = require('webpack'),
+  webpackConfig = require('./webpack.config.js');
 
 module.exports = function (grunt) {
 
   grunt.initConfig({
     clean: {
-      build: ["dist/**"]
+      build: ['dist/**']
     },
 
     copy: {
@@ -13,9 +15,9 @@ module.exports = function (grunt) {
         files: [{
           // This is to copy css, images and localized strings
           expand: true,
-          cwd: ".",
-          src: ["css/**", "images/**"/*, "nls/**"*/],
-          dest: "./dist/__VERSION__/"
+          cwd: '.',
+          src: ['css/**', 'images/**'],
+          dest: './dist/__VERSION__/'
         }]
       },
 
@@ -23,9 +25,9 @@ module.exports = function (grunt) {
         files: [{
           // This is to copy the favicon
           expand: true,
-          cwd: ".",
-          src: ["index.html", "favicon.ico"],
-          dest: "./dist/"
+          cwd: '.',
+          src: ['index.html', 'favicon.ico'],
+          dest: './dist/'
         }]
       }
     },
@@ -33,19 +35,19 @@ module.exports = function (grunt) {
     webpack: {
       options: webpackConfig,
       build: {
-        devtool: "source-map",
+        devtool: 'source-map',
         plugins: [
           new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false}
           }),
           new webpack.DefinePlugin({
-            "process.env.NODE_ENV": JSON.stringify("production")
+            'process.env.NODE_ENV': JSON.stringify('production')
           })
         ]
       },
 
-      "build-dev": {
-        devtool: "inline-source-map"
+      'build-dev': {
+        devtool: 'inline-source-map'
       }
     },
 
@@ -67,19 +69,19 @@ module.exports = function (grunt) {
   grunt.registerTask('clean-all', ['clean:build']);
 
   // Production build
-  grunt.registerTask("build", [
-    "clean-all",
-    "copy:top_level",
-    "copy:assets",
-    "webpack:build"
+  grunt.registerTask('build', [
+    'clean-all',
+    'copy:top_level',
+    'copy:assets',
+    'webpack:build'
   ]);
 
   // dev build with un-minified dc-signature-panel-bundle.js
-  grunt.registerTask("build-dev", [
-    "clean-all",
-    "copy:top_level",
-    "copy:assets",
-    "webpack:build-dev"
+  grunt.registerTask('build-dev', [
+    'clean-all',
+    'copy:top_level',
+    'copy:assets',
+    'webpack:build-dev'
   ]);
 
   grunt.registerTask('test', [
