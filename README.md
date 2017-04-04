@@ -241,3 +241,132 @@ The project uses the same certificate used by the local echosign server. If you 
     ```
 
 4. Now you have the new `key.pem` and `cert.pem` files. You can delete the `local.p12` file.
+
+## Unit Test Support
+### Frameworks Being Used
+The project use the following frameworks for unit tests:
+
+* [Karma](https://karma-runner.github.io/1.0/index.html): A test runner which spawns a web server that executes source code against test code for each of the browsers connected, like Chrome, FireFox, Safari, IE, etc, or headless browser like PhantomJS.
+
+* [Mocha](http://mochajs.org/):  A feature-rich JavaScript test framework supporting asynchronous testing and running on Node.js and in the browser.
+
+* [Chai](): A BDD / TDD assertion library for node and the browser that can be delightfully paired with any javascript testing framework.
+
+* [PhantomJS](): A headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.
+
+### Adding Unit Test Support to Your Project
+1. If you started your project by cloning cdnexample after the unit test support was added, you should already have the needed packages installed. Otherwise, you will need to install the following modules:
+    ```
+    $ npm install --save-dev babel-polyfill \
+    chai \
+    grunt-karma \
+    karma
+    karma-chrome-launcher \
+    karma-mocha \
+    karma-mocha-reporter \
+    karma-phantomjs-launcher \
+    karma-safari-launcher \
+    karma-sourcemap-loader \
+    karma-webpack \
+    mocha \
+    phantomjs-prebuilt
+    ```
+
+2. Copy `karma.conf.js` file to your project if you don't have one and modify it to your needs. Please reference the [Karma configuration document](https://karma-runner.github.io/1.0/config/configuration-file.html) for the settings suitable to your project.
+
+3. Copy `webpack-test.config.js` file to your project if you don't have one and modify it to your needs. Please note that the `entry` property is not needed since Karma will automatically insert your test files as entries.
+
+4. If you copied cdnexample, remove the existing test scripts under the `test` folder. Add your own test scripts there, or into any folde you want, but you'll need to modify the entries under the `files` and `preprocessors` properties in `karma.conf.js` file to match your test folder name.
+
+5. Modify your Gruntfile.js based on the changes shown in [this git diff](https://git.corp.adobe.com/EchoSign/cdnexample/commit/d468c4810cd8454acedc025a4a125ad5b35ec8a7#diff-35b4a816e0441e6a375cd925af50752c).
+
+6. Add/Modify the following entry under the `scripts` section in your `package.json` file:
+    ```
+    "scripts": {
+        ...
+        "test": "grunt test"
+      },
+    ```
+
+7. Now you are ready to run your unit tests with the command `npm run test`. Here is a sample run for cdnexample:
+    ```
+    $ npm run test
+
+    > cdnexample@0.1.0 test /Users/emanfu/dev/cdnexample
+    > grunt test
+
+    Running "karma:unit" (karma) task
+
+    START:
+    Hash: e0bdc8cc97632b01d813
+    Version: webpack 2.2.1
+    Time: 39ms
+    webpack: Compiled successfully.
+    webpack: Compiling...
+    webpack: wait until bundle finished:
+     ... (omitted)
+
+    03 04 2017 17:28:26.725:INFO [karma]: Karma v1.5.0 server started at http://0.0.0.0:9876/
+    03 04 2017 17:28:26.726:INFO [launcher]: Launching browser PhantomJS with unlimited concurrency
+    03 04 2017 17:28:26.756:INFO [launcher]: Starting browser PhantomJS
+    03 04 2017 17:28:27.332:INFO [PhantomJS 2.1.1 (Mac OS X 0.0.0)]: Connected on socket k183IM33M2-EX8fgAAAA with id 41261321
+      App Library Functions
+        ✔ sets hello-world message
+        ✔ shows image info
+      Localized String Loader
+        ✔ loads en_US strings
+        ✔ loads fr_FR strings
+
+    Finished in 0.02 secs / 0.006 secs @ 17:28:27 GMT-0700 (PDT)
+
+    SUMMARY:
+    ✔ 4 tests completed
+
+    Done.
+
+### Run Unit Tests in CI/CD Process
+If you copied `cdnexample` after the unit test support was added, your unit tests will run when a PR is created (make-ci job) and in the Build step when you depoy your project in Moonbeam. If your project was created before the unit test support was created, please copy the latest `Dockerfile.build` file into your project to replace the old one.
+
+### Some Notes about Debugging Your Tests
+
+* Your can configure Karma to have a single-run of your tests, or ask it to watch any changes of your test files and automatically re-run the tests again. You can also specify that the tests should run in what browsers (including PhantomJS). In `karma.conf.js` file in this project, we use the variable `debugging` (default to `false`) to control the settings related to the above features:
+
+    - `autoWatch`: When it is `true`, Karma will watch your files and re-run your tests if any changes are detected. In this project, when `debugging` is `true`, `autoWatch` is `true`.
+
+    - `singleRun`: When it is `true`, Karma will only run your tests once and exit. In this project, if `debugging` is `true`, `singleRun` is `false`. **Please note it only makes sense that `autoWatch` and `singleRun` has opposite values.** If `autoWatch` and `singleRun` are both `true`, `autoWatch` does not have any effect. If `autoWatch` and `singleRun` are both `false`, your tests won't even run once (I was burnt by this strange behavior, and it costed me a lot of time to figure out why my tests wouldn't run.).
+
+    - `browsers`: Array of strings identifying the browsers in which the tests should run. In this project, when `debugging` is `true`, `Chrome` is used; otherwise `PhantomJS` is used.
+
+* When `autoWatch` is `true` and `singleRun` is `false`, and you run the command `npm run test`, the browser(s) you specify will be laucnhed and your tests will be executed in each of them. To debug your test code, click the Debug button, which will open a new tab with the debug context html and your test scripts loaded into the page. You can then use your favorite dev tools for that browser to debug your code. Simply refresh that page and your test code is re-executed.
+
+## Linting Support
+The project use [ESLint](http://eslint.org/) as our javascript code linter. If you copied cdnexample after the linting support was added, you just need to adjust the ESLint configuration to fit your needs. Otherwise, please follow the steps below to add linting support your project:
+
+1. Follow the [Getting Started Guide for ESLint](http://eslint.org/docs/user-guide/getting-started) to install eslint and setup your ESLint configuration file.
+
+2. Install `eslint-loader`:
+    ```
+    $ npm install --save-dev eslint-loader
+    ```
+
+3. Add the following entry into `module.rules` in your `webpack.config.js`:
+    ```
+    module: {
+        rules: [
+          {
+            test: /\.js$/,
+            enforce: 'pre',
+
+            loader: 'eslint-loader',
+            options: {
+              emitWarning: true,
+              failOnWarning: false,
+              failOnError: true
+            }
+          }
+        ]
+      },
+    ```
+
+4. Now everytime when you run `npm run build`, ESLint will lint your files and fail the build if there is any linting error based on the rules in the ESLint configuration file.
+

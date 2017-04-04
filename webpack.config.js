@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 var path = require('path');
 var fs = require('fs');
 
@@ -31,7 +33,7 @@ module.exports = {
   },
   devtool  : 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, 'dist'),
 
     // overlay: true captures only errors
     overlay: {
@@ -45,7 +47,7 @@ module.exports = {
 
     // comment out the following 3 lines if you don't want HTTPS support
     https: true,
-    key: fs.readFileSync("key.pem"),
+    key: fs.readFileSync('key.pem'),
     cert: fs.readFileSync('cert.pem')
   }
 };
