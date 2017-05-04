@@ -1,9 +1,9 @@
 FROM docker-asr-release.dr.corp.adobe.com/asr/nodejs-v7:1.0
 
+RUN apt-get update && apt-get install -y bzip2 git libfontconfig1
+
 COPY package.json package.json
 COPY .npmrc .npmrc
-
-RUN apt-get update && apt-get install -y bzip2 git libfontconfig1
 
 RUN npm install
 
