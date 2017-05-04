@@ -3,6 +3,22 @@
 # Exit on failure
 set -e
 
+if [ -z "$S3_BUCKETS" ]; then
+    echo Error: S3_BUCKETS not specified
+    exit 1
+fi
+
+if [ -n "$AWS_ROLE" ]; then
+    echo Preparing CLI to assume role $AWS_ROLE
+    mkdir ~/.aws
+    cat > ~/.aws/config << EOF
+[profile deploy]
+role_arn = $AWS_ROLE
+source_profile = default
+EOF
+    export AWS_DEFAULT_PROFILE=deploy
+fi
+
 TOP_LEVEL_MAX_AGE=60
 VERSIONED_MAX_AGE=86400
 
@@ -13,11 +29,6 @@ echo "path prefix is \"$path_prefix\""
 echo Reading Git sha from dist$path_prefix/sha.txt
 sha=`cat dist$path_prefix/sha.txt`
 echo "Git sha is \"$sha\""
-
-if [ -z "$S3_BUCKETS" ]; then
-    echo Error: S3_BUCKETS not specified
-    exit 1
-fi
 
 IFS=', ' read -r -a buckets <<< $S3_BUCKETS
 
