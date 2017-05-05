@@ -11,11 +11,20 @@ fi
 if [ -n "$AWS_ROLE" ]; then
     echo Preparing CLI to assume role $AWS_ROLE
     mkdir ~/.aws
+
+    cat > ~/.aws/credentials << EOF
+[default]
+aws_access_key_id=$AWS_ACCESS_KEY_ID
+aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+aws_session_token=$AWS_SESSION_TOKEN
+EOF
+
     cat > ~/.aws/config << EOF
 [profile deploy]
 role_arn = $AWS_ROLE
 source_profile = default
 EOF
+
     export AWS_DEFAULT_PROFILE=deploy
 fi
 
