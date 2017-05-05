@@ -14,9 +14,9 @@ mkdir ~/.aws
 
 cat > ~/.aws/config << EOF
 [default]
-aws_access_key_id=$AWS_ACCESS_KEY_ID
-aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-aws_session_token=$AWS_SESSION_TOKEN
+aws_access_key_id = $AWS_ACCESS_KEY_ID
+aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+aws_session_token = $AWS_SESSION_TOKEN
 EOF
 
 if [ -n "$AWS_ROLE" ]; then
@@ -25,7 +25,7 @@ if [ -n "$AWS_ROLE" ]; then
     # append the role
     cat >> ~/.aws/config << EOF
 role_arn = $AWS_ROLE
-source_profile=default
+source_profile = default
 EOF
 
 fi
