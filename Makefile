@@ -36,6 +36,7 @@ run-s3-image-interactively: build-s3
 	-e AWS_ACCESS_KEY_ID=*** \
 	-e AWS_SECRET_ACCESS_KEY=*** \
 	-e AWS_SESSION_TOKEN=*** \
+	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-i -t $(IMAGE_TAG_S3) /bin/bash
 
@@ -43,6 +44,7 @@ run-s3-image-interactively: build-s3
 	-e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
 	-e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) \
 	-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN) \
+	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-i -t $(IMAGE_TAG_S3) /bin/bash
 
@@ -51,6 +53,7 @@ run-s3-image: build-s3
 	-e AWS_ACCESS_KEY_ID=*** \
 	-e AWS_SECRET_ACCESS_KEY=*** \
 	-e AWS_SESSION_TOKEN=*** \
+	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	$(IMAGE_TAG_S3)
 
@@ -58,6 +61,7 @@ run-s3-image: build-s3
 	-e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
 	-e AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) \
 	-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN) \
+	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	$(IMAGE_TAG_S3)
 
