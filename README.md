@@ -370,4 +370,3 @@ The project use [ESLint](http://eslint.org/) as our javascript code linter. If y
     ```
 
 4. Now everytime when you run `npm run build`, ESLint will lint your files and fail the build if there is any linting error based on the rules in the ESLint configuration file.
-
