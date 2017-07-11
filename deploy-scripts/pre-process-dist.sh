@@ -15,8 +15,9 @@ if [ -e dist/sha.txt ]; then
      exit 1
 fi
 
-echo Determining Git sha
+echo Determining Git sha and repo url
 sha=`git rev-parse --short HEAD`
+git_repo=`git ls-remote --get-url`
 
 echo "Writing Git sha \"$sha\" to dist/sha.txt"
 echo $sha > dist/sha.txt
@@ -47,6 +48,9 @@ fi
 
 echo Creating build-artifacts directory
 mkdir build-artifacts
+
+echo "Writing git repo url \"$git_repo\" to build-artifacts/git-repo.txt"
+echo $git_repo > build-artifacts/git-repo.txt
 
 echo "Writing path prefix \"$PATH_PREFIX\" to build-artifacts/path-prefix.txt"
 echo $PATH_PREFIX > build-artifacts/path-prefix.txt
