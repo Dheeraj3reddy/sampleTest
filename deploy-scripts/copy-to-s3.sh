@@ -39,64 +39,64 @@ unset AWS_SESSION_TOKEN
 TOP_LEVEL_MAX_AGE=60
 VERSIONED_MAX_AGE=86400
 
-echo Reading path prefix from build-artifacts/path-prefix.txt
+echo "Reading path prefix from build-artifacts/path-prefix.txt"
 path_prefix=`cat build-artifacts/path-prefix.txt`
 echo "path prefix is \"$path_prefix\""
 
-echo Reading Git sha from dist$path_prefix/sha.txt
+echo "Reading Git sha from dist$path_prefix/sha.txt"
 sha=`cat dist$path_prefix/sha.txt`
 echo "Git sha is \"$sha\""
 
-echo Reading Git repo URL from build-artifacts/git-repo.txt
+echo "Reading git repo URL from build-artifacts/git-repo.txt"
 git_repo=`cat build-artifacts/git-repo.txt`
 echo "Git repo URL is \"$git_repo\""
+
+if [ -z "$LOCK_PHRASE" ]; then
+    echo "No LOCK_PHRASE is provided in the environment. Using Git repo URL."
+    LOCK_PHRASE=$git_repo
+fi
+echo "LOCK_PHRASE is \"$LOCK_PHRASE\""
 
 IFS=', ' read -r -a buckets <<< $S3_BUCKETS
 
 function create_lock {
-    echo "Creating path lock s3://$bucket/locks$path_prefix/lock"
-    echo $git_repo > path.lock
-    aws s3 cp path.lock s3://$bucket/locks$path_prefix/lock
+    # parameter $1: path_prefix
+    s3_lock_path="s3://$bucket/manifests$path_prefix/lock"
+    echo "Creating path lock $s3_lock_path"
+    echo $LOCK_PHRASE > lock_file
+    aws s3 cp lock_file $s3_lock_path
 }
 
-function s3_object_exists {
-    # It is tricky to check if an S3 object exists. There is no explicit S3
-    # command for that purpose. Here we use the "ls" command. However,
-    # "ls s3://<bucket><s3_path>" will show any objects prefixed with s3_path. For example,
-    # "ls s3://cdn-ue1-preview/dist/abc" will show /dist/abc, /dist/abcde, /dist/abcdef, etc.
-    # Therefore, we will need to only count the exact object name listed in the output.
-    # Another tricky thing is, if the object is a folder, the output is like this:
-    #                            PRE cdnexample/
-    # but if the object is a file, the output is like this:
-    # 2017-07-10 22:01:30          8 sha.txt
-    # That is, for folders, the object name is at column 2 with a trailing "/", and for
-    # files, the object name is at column 4. The logic below is based on the above facts.
-
-    obj_path=`echo $1 | sed 's/\(.*\)\/\([^/]*\)/\1/'`
-    obj_name=`echo $1 | sed 's/\(.*\)\/\([^/]*\)/\2/'`
-    count=$(aws s3 ls s3://$bucket$obj_path/$obj_name | \
-        awk -v re=$obj_name"/" "{ if (\$4 == \"${obj_name}\") print \$4; else if (\$2 ~ re) print \$2 }" | wc -l)
+# Check if the specified path_prefix has a deployment in it.
+# The function runs an "ls" command for the manifests/$path_prefix folder
+# and see if there is a <sha>.txt file there
+function check_deploy {
+    # parameter $1: path_prefix
+    path_prefix=$1
+    count=`ls manifests/$path_prefix | grep "[a-f0-9]\{7\}\\.txt" | wc -l`
     echo $count
 }
 
 for bucket in "${buckets[@]}"
 do
+    # Download manifests folder for deployment detection
+    rm -rf manifests
+    aws s3 cp s3://$bucket/manifests manifests --recursive
+
     # Make sure the path_prefix belongs to this git repo
     echo "Checking deployment locks in $bucket"
 
     # check if there is already a deployment at exactly path_prefix
-    path_check=`s3_object_exists /dist$path_prefix`
-    deploy_check=`s3_object_exists /dist$path_prefix/sha.txt`
-    lock_check=`s3_object_exists /locks$path_prefix/lock`
+    deploy_check=`check_deploy $path_prefix`
+    lock_file_path="manifests$path_prefix/lock"
 
     if [ $deploy_check -gt 0 ]; then
         # There is a deployment at path_prefix. check if the lock file exists.
-        if [ $lock_check -gt 0 ]; then
+        if [ -f "$lock_file_path" ]; then
             # The lock file also exists. we will allow the deployment if the content of
             # the lock file match the git repo url.
-            aws s3 cp s3://$bucket/locks$path_prefix/lock path.lock
-            lock_content=`cat path.lock`
-            if [ "$git_repo" != "$lock_content" ]; then
+            lock_content=`cat $lock_file_path`
+            if [ "$LOCK_PHRASE" != "$lock_content" ]; then
                 echo "The path prefix \"$path_prefix\" does not belongs to repo $git_repo"
                 exit 1
             fi
@@ -104,9 +104,9 @@ do
         else
             # The lock file does not exist. create one in this case and allow the deployment.
             echo "Deployment path $path_prefix exists, but path lock does not exist -- allowing deployment"
-            create_lock
+            create_lock $lock_file_path
         fi
-    elif [ $path_check -gt 0 ]; then
+    elif [ -d "manifests$path_prefix" ]; then
         # No deployment at the path, but the path does exist, which means the path must be
         # some other projects' descendant or ancestor. we don't allow this case.
         echo "Deployment path $path_prefix is a descendant or ancestor of 1 or more projects' deployment path -- aborting deployment"
@@ -121,7 +121,7 @@ do
         do
             if [ ! -z ${path_parts[index]} ] && [ $index -lt $((num_path_parts-1)) ]; then
                 ancestor_path="$ancestor_path/${path_parts[index]}"
-                deploy_check=`s3_object_exists /dist$ancestor_path/sha.txt`
+                deploy_check=`check_deploy $ancestor_path`
                 if [ $deploy_check -gt 0 ]; then
                     # Found a deployment in an ancestor path. Aborting deployment
                     echo "Deployment path $path_prefix is a descendant of the deployment at $ancestor_path -- aborting deployment"
@@ -133,7 +133,7 @@ do
         # No existing deployment at the path prefix and no conflict cases found.
         # Create the lock file and allow the deployment.
         echo "Deployment path $path_prefix does not exist and no conflicts found -- allowing deployment"
-        create_lock
+        create_lock $lock_file_path
     fi
 
     echo ---------- Pushing to S3: $bucket ----------
