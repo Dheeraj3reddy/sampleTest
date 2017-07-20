@@ -37,14 +37,27 @@ unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
 
 TOP_LEVEL_MAX_AGE=60
-VERSIONED_MAX_AGE=86400
+SECOND_LEVEL_MAX_AGE=86400
+
+if [ -f "build-artifacts/deploy.config" ]; then
+    # Import the variables in deploy.config. This could override the default
+    # cache times specified above
+    echo "Importing build-artifacts/deploy.config"
+    . build-artifacts/deploy.config
+fi
 
 echo "Reading path prefix from build-artifacts/path-prefix.txt"
 path_prefix=`cat build-artifacts/path-prefix.txt`
 echo "path prefix is \"$path_prefix\""
 
-echo "Reading Git sha from dist$path_prefix/sha.txt"
-sha=`cat dist$path_prefix/sha.txt`
+if [ -z "$VERSION" ]; then
+    sha_file=dist$path_prefix/sha.txt
+else
+    sha_file=dist$path_prefix/${VERSION}/sha.txt
+fi
+
+echo "Reading Git sha from $sha_file"
+sha=`cat $sha_file`
 echo "Git sha is \"$sha\""
 
 echo "Reading git repo URL from build-artifacts/git-repo.txt"
@@ -60,7 +73,6 @@ echo "LOCK_PHRASE is \"$LOCK_PHRASE\""
 IFS=', ' read -r -a buckets <<< $S3_BUCKETS
 
 function create_lock {
-    # parameter $1: path_prefix
     s3_lock_path="s3://$bucket/manifests$path_prefix/lock"
     echo "Creating path lock $s3_lock_path"
     echo $LOCK_PHRASE > lock_file
@@ -104,7 +116,7 @@ do
         else
             # The lock file does not exist. create one in this case and allow the deployment.
             echo "Deployment path $path_prefix exists, but path lock does not exist -- allowing deployment"
-            create_lock $lock_file_path
+            create_lock
         fi
     elif [ -d "manifests$path_prefix" ]; then
         # No deployment at the path, but the path does exist, which means the path must be
@@ -133,22 +145,34 @@ do
         # No existing deployment at the path prefix and no conflict cases found.
         # Create the lock file and allow the deployment.
         echo "Deployment path $path_prefix does not exist and no conflicts found -- allowing deployment"
-        create_lock $lock_file_path
+        create_lock
     fi
 
     echo ---------- Pushing to S3: $bucket ----------
 
-    echo "--- Pushing dist$path_prefix/$sha/* into dist$path_prefix/$sha with max-age=$VERSIONED_MAX_AGE ---"
-    aws s3 cp dist$path_prefix/$sha s3://$bucket/dist$path_prefix/$sha --recursive --cache-control max-age=$VERSIONED_MAX_AGE
+    if [ -z "$VERSION" ]; then
+        dist_src=dist$path_prefix
+        s3_dest=s3://$bucket/dist$path_prefix
+        manifest_src=build-artifacts/manifests$path_prefix/$sha.txt
+        manifest_dest=s3://$bucket/manifests$path_prefix/$sha.txt
+    else
+        dist_src=dist$path_prefix/${VERSION}
+        s3_dest=s3://$bucket/dist$path_prefix/${VERSION}
+        manifest_src=build-artifacts/manifests$path_prefix/${VERSION}_$sha.txt
+        manifest_dest=s3://$bucket/manifests$path_prefix/${VERSION}_$sha.txt
+    fi
+
+    echo "--- Pushing $dist_src/$sha/* into $s3_dest with max-age=$SECOND_LEVEL_MAX_AGE ---"
+    aws s3 cp $dist_src/$sha $s3_dest/$sha --recursive --cache-control max-age=$SECOND_LEVEL_MAX_AGE
 
     # Push top level assets AFTER pushing sha assets so we don't publish a reference to sha assets before they're available
-    echo "--- Pushing dist$path_prefix/* (excluding dist$path_prefix/$sha and dist$path_prefix/sha.txt) into dist$path_prefix with max-age=$TOP_LEVEL_MAX_AGE ---"
-    aws s3 cp dist$path_prefix s3://$bucket/dist$path_prefix --recursive --exclude $sha/* --exclude sha.txt --cache-control max-age=$TOP_LEVEL_MAX_AGE
+    echo "--- Pushing $dist_src/* (excluding $dist_src/$sha and $dist_src/sha.txt) into $s3_dest with max-age=$TOP_LEVEL_MAX_AGE ---"
+    aws s3 cp $dist_src $s3_dest --recursive --exclude $sha/* --exclude sha.txt --cache-control max-age=$TOP_LEVEL_MAX_AGE
 
-    echo "--- Pushing dist$path_prefix/sha.txt to dist$path_prefix/sha.txt with max-age=$TOP_LEVEL_MAX_AGE ---"
-    aws s3 cp dist$path_prefix/sha.txt s3://$bucket/dist$path_prefix/sha.txt --cache-control max-age=$TOP_LEVEL_MAX_AGE
+    echo "--- Pushing $dist_src/sha.txt to $s3_dest/sha.txt with max-age=$TOP_LEVEL_MAX_AGE ---"
+    aws s3 cp $dist_src/sha.txt $s3_dest/sha.txt --cache-control max-age=$TOP_LEVEL_MAX_AGE
 
-    echo "--- Pushing build-artifacts/manifests$path_prefix/$sha.txt to manifests$path_prefix/$sha.txt ---"
-    aws s3 cp build-artifacts/manifests$path_prefix/$sha.txt s3://$bucket/manifests$path_prefix/$sha.txt
+    echo "--- Pushing $manifest_src to $manifest_dest ---"
+    aws s3 cp $manifest_src $manifest_dest
 done
 

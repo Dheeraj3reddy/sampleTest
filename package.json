@@ -9,7 +9,8 @@
     "builddev": "grunt build-dev",
     "start": "webpack-dev-server",
     "watch": "webpack --progress --watch",
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "echo 'nothing to do for postinstall'"
   },
   "repository": {
     "type": "git",

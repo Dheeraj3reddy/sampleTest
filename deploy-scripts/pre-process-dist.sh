@@ -55,17 +55,33 @@ echo $git_repo > build-artifacts/git-repo.txt
 echo "Writing path prefix \"$PATH_PREFIX\" to build-artifacts/path-prefix.txt"
 echo $PATH_PREFIX > build-artifacts/path-prefix.txt
 
+# If the deployment config file exists, read it.
+if [ -f "deploy.config" ]; then
+    # import the variables in the deploy.config file
+    . deploy.config
+
+    # also copy the file to build-artifacts so that copy-to-s3.sh can use it
+    echo "Copying deploy.config to build-artifacts/deploy.config"
+    cp deploy.config build-artifacts/deploy.config
+fi
+
 echo Moving dist to build-artifacts/dist
 mv dist build-artifacts/dist
 
-echo Creating dist${PATH_PREFIX} directory
-mkdir -p dist${PATH_PREFIX}
+if [ -z "$VERSION" ]; then
+    dest=dist${PATH_PREFIX}
+else
+    dest=dist${PATH_PREFIX}/${VERSION}
+fi
 
-echo Moving build-artifacts/dist/$VERSION_STRING to dist${PATH_PREFIX}/$sha
-mv build-artifacts/dist/$VERSION_STRING dist${PATH_PREFIX}/$sha
+echo "Creating $dest directory"
+mkdir -p $dest
 
-echo "Moving build-artifacts/dist/* into dist${PATH_PREFIX}"
-mv build-artifacts/dist/* dist${PATH_PREFIX}
+echo Moving build-artifacts/dist/$VERSION_STRING to $dest/$sha
+mv build-artifacts/dist/$VERSION_STRING $dest/$sha
+
+echo "Moving build-artifacts/dist/* into $dest"
+mv build-artifacts/dist/* $dest
 
 echo Removing build-artifacts/dist
 rm -r build-artifacts/dist
@@ -73,5 +89,13 @@ rm -r build-artifacts/dist
 echo Creating build-artifacts/manifests${PATH_PREFIX} directory
 mkdir -p build-artifacts/manifests${PATH_PREFIX}
 
-echo Writing manifest to build-artifacts/manifests${PATH_PREFIX}/$sha.txt
-find dist${PATH_PREFIX} -maxdepth 1 | grep -v "^dist${PATH_PREFIX}$" > build-artifacts/manifests${PATH_PREFIX}/$sha.txt
+if [ -z "${VERSION}" ]; then
+    manifest_file=build-artifacts/manifests${PATH_PREFIX}/$sha.txt
+else
+    # Here we use ${VERSION}_$sha.txt instead of ${VERSION}/$sha.txt to make
+    # clobbering detection logic easier.
+    manifest_file=build-artifacts/manifests${PATH_PREFIX}/${VERSION}_$sha.txt
+fi
+
+echo Writing manifest to $manifest_file
+find $dest -maxdepth 1 | grep -v "^${dest}$" > $manifest_file
