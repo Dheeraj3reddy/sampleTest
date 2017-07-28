@@ -17,7 +17,7 @@ fi
 
 echo Determining Git sha and repo url
 sha=`git rev-parse --short HEAD`
-git_repo=`git ls-remote --get-url`
+default_lock_phrase=`git ls-remote --get-url` || echo "No remote repo found. Default lock phrase is empty."
 
 echo "Writing Git sha \"$sha\" to dist/sha.txt"
 echo $sha > dist/sha.txt
@@ -49,16 +49,29 @@ fi
 echo Creating build-artifacts directory
 mkdir build-artifacts
 
-echo "Writing git repo url \"$git_repo\" to build-artifacts/git-repo.txt"
-echo $git_repo > build-artifacts/git-repo.txt
+echo "Writing git repo url \"$default_lock_phrase\" to build-artifacts/default-lock-phrase.txt"
+echo $default_lock_phrase > build-artifacts/default-lock-phrase.txt
 
 echo "Writing path prefix \"$PATH_PREFIX\" to build-artifacts/path-prefix.txt"
 echo $PATH_PREFIX > build-artifacts/path-prefix.txt
 
+function read_deploy_config {
+    file=$1
+    if [ -f "$file" ]; then
+        echo "Importing $file"
+        while IFS='=' read -r key value
+        do
+            echo "key=$key, value=$value"
+            if [[ -n "$key" && ! $key =~ ^#.*$ && -n "$value" ]]; then
+                eval "${key}='${value}'"
+            fi
+        done < "$file"
+    fi
+}
+
 # If the deployment config file exists, read it.
 if [ -f "deploy.config" ]; then
-    # import the variables in the deploy.config file
-    . deploy.config
+    read_deploy_config "deploy.config"
 
     # also copy the file to build-artifacts so that copy-to-s3.sh can use it
     echo "Copying deploy.config to build-artifacts/deploy.config"

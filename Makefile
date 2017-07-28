@@ -38,6 +38,7 @@ run-s3-image-interactively: build-s3
 	-e AWS_SESSION_TOKEN=*** \
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
+	-e LOCK_PHRASE=$(LOCK_PHRASE) \
 	-i -t $(IMAGE_TAG_S3) /bin/bash
 
 	@docker run \
@@ -46,6 +47,7 @@ run-s3-image-interactively: build-s3
 	-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN) \
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
+	-e LOCK_PHRASE=$(LOCK_PHRASE) \
 	-i -t $(IMAGE_TAG_S3) /bin/bash
 
 run-s3-image: build-s3
@@ -55,6 +57,7 @@ run-s3-image: build-s3
 	-e AWS_SESSION_TOKEN=*** \
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
+	-e LOCK_PHRASE=$(LOCK_PHRASE) \
 	$(IMAGE_TAG_S3)
 
 	@docker run \
@@ -63,6 +66,7 @@ run-s3-image: build-s3
 	-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN) \
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
+	-e LOCK_PHRASE=$(LOCK_PHRASE) \
 	$(IMAGE_TAG_S3)
 
 build-nginx: build-builder
