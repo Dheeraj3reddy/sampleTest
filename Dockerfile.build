@@ -1,4 +1,4 @@
-FROM docker-asr-release.dr.corp.adobe.com/asr/nodejs-v7:1.0
+FROM docker-asr-release.dr.corp.adobe.com/asr/nodejs-v7:1.2
 
 RUN apt-get update && apt-get install -y bzip2 git libfontconfig1 g++ build-essential python
 
@@ -8,6 +8,8 @@ COPY .npmrc .npmrc
 RUN npm install
 
 COPY . .
+
+RUN npm run postinstall
 
 RUN npm run build
 
