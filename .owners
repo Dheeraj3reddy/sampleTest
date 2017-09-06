@@ -1,0 +1,14 @@
+features:
+  rulesetfile:
+    paths:
+      - "**/*"
+      - ".*"
+      - "*"
+    groups:
+      - dev
+groups:
+  dev:
+    - <developer1>
+    - <developer2>
+    - <developer3>
+    - <developer4>

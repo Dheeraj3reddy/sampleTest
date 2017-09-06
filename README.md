@@ -370,3 +370,19 @@ The project use [ESLint](http://eslint.org/) as our javascript code linter. If y
     ```
 
 4. Now everytime when you run `npm run build`, ESLint will lint your files and fail the build if there is any linting error based on the rules in the ESLint configuration file.
+
+
+
+
+## Owners file: ## 
+Moonbeam PR approval is restricted to a selection of individuals, using the .owners file present in the repo root. What we WANT to be able to do is add restrictions for ALL files in the repo with a simple expression (like \*\*/\*). Unfortunately, the tooling doesn't currently work that way for dot files. As such, we can approximate what we want with the following rules:
+
+1. \* - applicable to all files in the repo root, except those starting with dot.
+2. .\* - applicable to all dot files in the repo root.
+3. \*\*/\* - applicable to all nested files, except those starting with dot, or in any hierarchy containing a folder starting with dot.
+4. \*\*/.\* - applicable to all dot files, except those in any hierarchy containing a folder starting with dot.
+5. .porter/\*\*/\* - applicable to all nested files in the .porter folder, except those starting with dot, or in any sub-hierarchy containing a folder starting with dot.
+
+This currently covers everything in a typical Adobe Sign project. However, it would not cover, for example, the addition of a dot file inside the .porter hierarchy, or a new folder somewhere else in the project starting with a dot.
+
+https://wiki.corp.adobe.com/display/ethos/Moonbeam+Owner%27s+File+Configuration
