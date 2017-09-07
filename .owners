@@ -4,6 +4,7 @@ features:
       - "**/*"
       - ".*"
       - "*"
+      - "**/.*"
     groups:
       - dev
 groups:
