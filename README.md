@@ -380,9 +380,8 @@ Moonbeam PR approval is restricted to a selection of individuals, using the .own
 1. \* - applicable to all files in the repo root, except those starting with dot.
 2. .\* - applicable to all dot files in the repo root.
 3. \*\*/\* - applicable to all nested files, except those starting with dot, or in any hierarchy containing a folder starting with dot.
-4. \*\*/.\* - applicable to all dot files, except those in any hierarchy containing a folder starting with dot.
-5. .porter/\*\*/\* - applicable to all nested files in the .porter folder, except those starting with dot, or in any sub-hierarchy containing a folder starting with dot.
+4. \*\*/.\* - applicable to all nested dot files, except those in any hierarchy containing a folder starting with dot.
 
-This currently covers everything in a typical Adobe Sign project. However, it would not cover, for example, the addition of a dot file inside the .porter hierarchy, or a new folder somewhere else in the project starting with a dot.
+This currently covers everything in a typical all-static project. However, it would not cover, for example, the addition of files inside a new folder hierarchy containing a folder starting with dot.
 
 https://wiki.corp.adobe.com/display/ethos/Moonbeam+Owner%27s+File+Configuration
