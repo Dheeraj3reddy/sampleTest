@@ -8,7 +8,9 @@ features:
       - dev
 groups:
   dev:
-    - <developer1>
-    - <developer2>
-    - <developer3>
-    - <developer4>
+    - shickey
+    - emanfu
+    - rdolgov
+    - colmurph
+    - radhingr
+    - vaddipar
