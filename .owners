@@ -1,0 +1,17 @@
+features:
+  rulesetfile:
+    paths:
+      - "**/*"
+      - ".*"
+      - "*"
+      - "**/.*"
+    groups:
+      - dev
+groups:
+  dev:
+    - shickey
+    - emanfu
+    - rdolgov
+    - colmurph
+    - radhingr
+    - vaddipar
