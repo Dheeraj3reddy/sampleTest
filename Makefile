@@ -22,7 +22,7 @@ build-builder:
 # This target is called by the Jenkins "build" job.
 # Runs the builder image and pipes the output (tarred artifacts) into the build for the S3 image.
 # This S3 image knows how to push the artifacts to S3 when run.
-build: build-builder
+build-s3: build-builder
 	docker run $(BUILDER_TAG) | docker build -t $(IMAGE_TAG_S3) -f Dockerfile.s3 -
 
 
