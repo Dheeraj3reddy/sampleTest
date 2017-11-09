@@ -1,4 +1,0 @@
-# TODO(shickey) - Follow up with ASR to check on "blessed" status of this base container
-FROM behance/docker-nginx:8.0-alpine
-
-# TODO(shickey) - this is for local testing using NGINX
