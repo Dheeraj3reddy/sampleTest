@@ -10,3 +10,5 @@
 #
 # npm install
 # npm run wdio:dev:grid-aic
+
+echo "TODO: Run your UI tests here."
