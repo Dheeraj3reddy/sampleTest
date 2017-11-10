@@ -4,34 +4,70 @@ endif
 
 # $sha is provided by jenkins
 BUILDER_TAG?=$(or $(sha),$(SERVICE_NAME)-builder)
-
-IMAGE_TAG_S3=$(SERVICE_NAME)-s3
-IMAGE_TAG_NGINX=$(SERVICE_NAME)-nginx
+IMAGE_TAG=$(SERVICE_NAME)-s3
 
 default: ci
 
-# This target is called by the Jenkins "ci" job. For now it just builds the builder image,
-# but we plan to include unit testing as part of this target.
-ci: build-builder
+# This target is called by the Jenkins "ci" job. It builds and runs the builder image,
+# which should build the project and run unit tests, and optionally, code coverage.
+ci: run-builder
+ifeq ($(RUN_COVERAGE),true)
+	docker run \
+	-v `pwd`:/build:z \
+	-e COVERALLS_SERVICE_NAME=$(COVERALLS_SERVICE_NAME) \
+	-e COVERALLS_REPO_TOKEN=$(COVERALLS_REPO_TOKEN) \
+	-e COVERALLS_ENDPOINT=$(COVERALLS_ENDPOINT) \
+	-e CI_PULL_REQUEST=$(ghprbPullId) \
+	$(BUILDER_TAG) /build/run-coverage.sh
+else
+	@echo "No test coverage to run"
+endif
 
-# Builds the intermediate builder image, responsible for doing the npm build and preparing
-# the artifacts for deployment (moving them into the hash folder, preparing the manifest, etc.).
-build-builder:
-	docker build --build-arg PATH_PREFIX=$(PATH_PREFIX) -t $(BUILDER_TAG) -f Dockerfile.build .
+# Builds and runs the builder image, which builds the project and runs unit
+# tests, and then prepares the artifacts for deployment (moving them into the hash
+# folder, preparing the manifest, etc.). The results are placed in the current
+# directory of the local file system.
+run-builder:
+	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	@echo Executing: docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX=$(PATH_PREFIX) \
+	-e PUSH_ARTIFACTS=$(PUSH_ARTIFACTS) \
+	-e NPM_AUTH=*** \
+	-e NPM_EMAIL=$(NPM_EMAIL) \
+	$(BUILDER_TAG)
+
+	@docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX=$(PATH_PREFIX) \
+	-e PUSH_ARTIFACTS=$(PUSH_ARTIFACTS) \
+	-e NPM_AUTH=$(NPM_AUTH) \
+	-e NPM_EMAIL=$(NPM_EMAIL) \
+	$(BUILDER_TAG)
 
 # This target is called by the Jenkins "build" job.
-# Runs the builder image and pipes the output (tarred artifacts) into the build for the S3 image.
-# This S3 image knows how to push the artifacts to S3 when run.
-build: build-builder
-	docker run $(BUILDER_TAG) | docker build -t $(IMAGE_TAG_S3) -f Dockerfile.s3 -
+# After running "run-builder" to produce the built static content on the local
+# file system, this target picks up the content and packages it into a
+# deployer image. This deployer image knows how to push the artifacts
+# to S3 when run.
+build: run-builder
+	docker build -t $(IMAGE_TAG) .
 
+# This target is called by the Jenkins "ui-test" job.
+# Runs the uitest image to launch the UI test.
+run-uitest:
+	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX=$(PATH_PREFIX) \
+	-t $(BUILDER_TAG) /build/run-uitest.sh
 
 ### Targets below this line are used for development and debugging purposes only ###
 
-run-build-image-interactively: build-builder
-	docker run -i -t $(BUILDER_TAG) /bin/bash
+run-build-image-interactively:
+	docker run -v `pwd`:/build:z -i -t $(BUILDER_TAG) /bin/bash
 
-run-s3-image-interactively: build-s3
+run-deployer-image-interactively:
 	@echo Executing: docker run \
 	-e AWS_ACCESS_KEY_ID=*** \
 	-e AWS_SECRET_ACCESS_KEY=*** \
@@ -39,7 +75,7 @@ run-s3-image-interactively: build-s3
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
-	-i -t $(IMAGE_TAG_S3) /bin/bash
+	-i -t $(IMAGE_TAG) /bin/bash
 
 	@docker run \
 	-e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
@@ -48,9 +84,9 @@ run-s3-image-interactively: build-s3
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
-	-i -t $(IMAGE_TAG_S3) /bin/bash
+	-i -t $(IMAGE_TAG) /bin/bash
 
-run-s3-image: build-s3
+run-deployer-image:
 	@echo Executing: docker run \
 	-e AWS_ACCESS_KEY_ID=*** \
 	-e AWS_SECRET_ACCESS_KEY=*** \
@@ -58,7 +94,7 @@ run-s3-image: build-s3
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
-	$(IMAGE_TAG_S3)
+	$(IMAGE_TAG)
 
 	@docker run \
 	-e AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) \
@@ -67,10 +103,5 @@ run-s3-image: build-s3
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
-	$(IMAGE_TAG_S3)
+	$(IMAGE_TAG)
 
-build-nginx: build-builder
-	docker run $(BUILDER_TAG) | docker build -t $(IMAGE_TAG_NGINX) -f Dockerfile.nginx -
-
-run-nginx-image-interactively: build-nginx
-	docker run -i -t $(IMAGE_TAG_NGINX) /bin/bash
