@@ -1,4 +1,4 @@
-FROM docker-asr-release.dr.corp.adobe.com/asr/static_deployer_base:1.1.0-alpine
+FROM docker-asr-release.dr.corp.adobe.com/asr/static_deployer_base:1.1.0
 
 COPY build-artifacts build-artifacts
 
