@@ -16,7 +16,7 @@ module.exports = function (grunt) {
           // This is to copy css, images and localized strings
           expand: true,
           cwd: '.',
-          src: ['css/**', 'images/**'],
+          src: ['css/**'],
           dest: './dist/__VERSION__/'
         }]
       },

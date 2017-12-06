@@ -1,1 +1,1 @@
-FROM docker-asr-release.dr.corp.adobe.com/asr/static_builder_base:1.0.0
+FROM docker-asr-release.dr.corp.adobe.com/asr/static_builder_node_v7:1.2.1

@@ -22,8 +22,18 @@ module.exports = {
           failOnWarning: false,
           failOnError: true
         }
-      }
-    ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[hash].[ext]'
+            }
+          }
+        ]
+      }]
   },
 
   output: {

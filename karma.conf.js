@@ -24,7 +24,7 @@ module.exports = function(config) {
       // test scripts
       'test/**/*.js',
 
-      // images used by the text_context.html file. they are not strictly needed,
+      // images used by the test_context.html file. they are not strictly needed,
       // but it's better to have a test environment as close to the real world
       // as possible.
       {
