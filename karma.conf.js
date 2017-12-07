@@ -71,8 +71,8 @@ module.exports = function(config) {
       ]
     },
 
-    customContextFile: "test/context/test_context.html",
-    customDebugFile: "test/context/test_debug_context.html",
+    customContextFile: 'test/context/test_context.html',
+    customDebugFile: 'test/context/test_debug_context.html',
 
   // test results reporter to use
     // possible values: 'dots', 'progress'
