@@ -31,6 +31,7 @@ function startApp(lang) {
   UiStrings.loadTranslations(lang).then(function () {
     lib.sayHello();
     lib.showImageInfo();
+    lib.showReadMe();
   });
 }
 

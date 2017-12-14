@@ -8,7 +8,8 @@ var jQuery = require('jquery'),
   UiStrings = require('./nls/ui-strings'),
   images = [
     require('../images/Bethoven.png'),
-    require('../images/obama-signature.jpg')];
+    require('../images/obama-signature.jpg')],
+  readMeUrl = require('../README.md');
 
 function sayHello() {
   // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadTranslations()
@@ -39,7 +40,22 @@ function showImageInfo() {
   jQuery('.image-info').html(info);
 }
 
+function showReadMe() {
+  jQuery.ajax({
+    url: '../' + readMeUrl,
+    method: 'GET',
+    accepts: {
+      all: '*/*'
+    },
+    dataType: 'text'
+  })
+    .done(function (data) {
+      jQuery('.readme pre').text(data);
+    });
+}
+
 module.exports = {
   sayHello: sayHello,
-  showImageInfo: showImageInfo
+  showImageInfo: showImageInfo,
+  showReadMe: showReadMe
 };

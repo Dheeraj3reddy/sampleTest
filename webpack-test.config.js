@@ -15,6 +15,17 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(md)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'docs/[hash].[ext]'
+            }
+          }
+        ]
       }]
   },
 

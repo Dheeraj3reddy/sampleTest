@@ -2,3 +2,11 @@
     font-size: 400%;
     text-align: center;
 }
+
+.readme {
+    padding: 2em;
+    overflow: scroll;
+    height: 20em;
+    border: solid 1px #c0c0c0;
+    margin: 0 5em;
+}
