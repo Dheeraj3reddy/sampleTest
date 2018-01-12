@@ -5,7 +5,7 @@
 
 var jQuery = require('jquery'),
   _ = require('underscore'),
-  UiStrings = require('./nls/ui-strings'),
+  UiStrings = require('./ui-strings'),
   images = [
     require('../images/Bethoven.png'),
     require('../images/obama-signature.jpg')],

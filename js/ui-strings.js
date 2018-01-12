@@ -14,6 +14,26 @@ var Promise = require('es6-promise').Promise;
 // Module level variable that stores translations (as key/value object)
 var loadedTranslations = null;
 
+var jQuery = require('jquery');
+
+function loadStringsImpl(loc) {
+  return new Promise(function (resolve, reject) {
+    jQuery.ajax({
+      url: 'nls/' + loc + '/ui-strings.json',
+      method: 'GET',
+      dataType: 'json'
+    })
+      .done(function (data) {
+        loadedTranslations = data || {};
+        resolve();
+      })
+      .fail(function (jqXHR) {
+        //console.error('Failed to load strings for locale %s', locale);
+        reject(jqXHR);
+      });
+  });
+}
+
 /**
  * Loads tranlsations based on the locale and stores it as loadedTranslations variable, that later can be used
  * via getTranslatedString() method.
@@ -22,12 +42,14 @@ var loadedTranslations = null;
  */
 function loadTranslations(locale) {
   var loc = (locale === 'en_US') ? 'root' : locale;
-  return new Promise(function (resolve) {
-    require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json')(function (jsonBundle) {
-      loadedTranslations = jsonBundle;
-      resolve(jsonBundle);
+  return loadStringsImpl(loc)
+    .catch(function(jqXHR) {
+      // if the error status is 404 Not Found, or 200 (empty file or file cannot be converted to JSON)
+      // try to load the en-US strings.
+      if (jqXHR.status == 404 || jqXHR.status == 200) {
+        return loadStringsImpl('en_US');
+      }
     });
-  });
 }
 
 /**
