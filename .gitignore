@@ -6,3 +6,4 @@ node_modules
 # Shannon's test scripts
 run-s3-image
 run-s3-image-interactively
+build-artifacts

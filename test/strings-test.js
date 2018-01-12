@@ -5,7 +5,7 @@
 /* global require, describe */
 
 var expect = require('chai').expect;
-var UiStrings = require('../js/nls/ui-strings');
+var UiStrings = require('../js/ui-strings');
 
 describe('Localized String Loader', function() {
   it('loads en_US strings', function () {
