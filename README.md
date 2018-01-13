@@ -193,6 +193,7 @@ Localization is handled by the code and json bundles located under js/nls folder
  
  
   This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
+  __NOTE:__ Due to a bug in karma-webpack, The lazy loading of string bundles is not working in Karma unit test. Currently we have to exactly pin to karma-webpack@2.0.3 to get the unit test work.
 
 ## HTTPS Support
 ### Disable/Enable HTTPS Support
