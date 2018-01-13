@@ -24,15 +24,7 @@ module.exports = function(config) {
       // test scripts
       'test/**/*.js',
 
-      // localized strings
-      {
-        pattern: 'nls/**/*.*',
-        included: false,
-        served: true,
-        watched: true
-      },
-
-      // images used by the test_context.html file. they are not strictly needed,
+      // images used by the text_context.html file. they are not strictly needed,
       // but it's better to have a test environment as close to the real world
       // as possible.
       {
@@ -90,12 +82,15 @@ module.exports = function(config) {
     // web server port
     port: 9876,
 
+
     // enable / disable colors in the output (reporters and logs)
     colors: false,
+
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
+
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: debugging,

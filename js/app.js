@@ -8,7 +8,7 @@
 
 var lib = require('./lib.js'),
   jQuery = require('jquery'),
-  UiStrings = require('./ui-strings');
+  UiStrings = require('./nls/ui-strings');
 
 // Need to setup path at runtime, otherwise by default /__VERSION__/__VERSION__/nls/translations_xx.js will be used
 // because webpack stores path to translated file in a form '__VERSION__/nls/translation_xx.js' plus example html uses

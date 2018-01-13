@@ -13,17 +13,11 @@ module.exports = function (grunt) {
     copy: {
       assets: {
         files: [{
-          // This is to copy css and images
+          // This is to copy css, images and localized strings
           expand: true,
           cwd: '.',
           src: ['css/**'],
           dest: './dist/__VERSION__/'
-        }, {
-          // This is to copy localized strings
-          expand: true,
-          cwd: '.',
-          src: ['nls/**'],
-          dest: './dist/__VERSION__'
         }]
       },
 

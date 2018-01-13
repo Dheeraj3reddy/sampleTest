@@ -5,7 +5,7 @@
 /* global require, describe */
 
 var expect = require('chai').expect,
-  UiStrings = require('../js/ui-strings'),
+  UiStrings = require('../js/nls/ui-strings'),
   lib = require('../js/lib'),
   jQuery = require('jquery'),
   _ = require('underscore');
