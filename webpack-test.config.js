@@ -11,7 +11,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'images/[hash].[ext]'
+              name: 'images/[name]-[hash].[ext]'
             }
           }
         ]
@@ -22,7 +22,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'docs/[hash].[ext]'
+              name: 'docs/[name]-[hash].[ext]'
             }
           }
         ]
