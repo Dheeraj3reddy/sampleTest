@@ -2,9 +2,10 @@
 .idea
 dist
 node_modules
+build-artifacts
+.DS_Store
 
-# Shannon's test scripts
+# These make Shannon and Eman's life easier. Nobody else needs to worry about them.
 run-s3-image
 run-s3-image-interactively
-build-artifacts
 node_modules.local
