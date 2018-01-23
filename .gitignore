@@ -5,7 +5,7 @@ node_modules
 build-artifacts
 .DS_Store
 
-# These make Shannon and Eman's life easier. Nobody else needs to worry about them.
+# These make Shannon's and Eman's life easier. Nobody else needs to worry about them.
 run-s3-image
 run-s3-image-interactively
 node_modules.local
