@@ -96,12 +96,12 @@ All paths used in your source files must be relative. How your project is deploy
 As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source files. During deployment, this string is replaced in all source files (with extensions `*.htm`, `*.html`, `*.css`, `*.js`, `*.json` with the correct folder name.
 
 ## Modify Build-Related Files
-The template project use [Webpack 2](https://webpack.js.org/) and [Grunt](https://gruntjs.com/) for code packaging and build management. The project will be built in the deployment pipeline by executing `build.sh` in the builder Docker container created from `Dockerfile.build.mt`. You will most likely need to modify `webpack.config.js` and `Gruntfile.js` for your own need.
+The template project uses [Webpack 2](https://webpack.js.org/) and [Grunt](https://gruntjs.com/) for code packaging and build management. The project will be built in the deployment pipeline by executing `build.sh`. You will most likely need to modify `webpack.config.js` and `Gruntfile.js` for your own need.
 
 You can use as many webpack features as you want, or even use your own code management/packaging solution like Require.js, or build tool like Gulp or even Makefile, but whatever you use to build your project, please make sure:
 
  1. Modify `build.sh` to use your own build system.
- 2. Your top-level files, which will have short cache age, has to be placed directly under `/dist`, and the asset files that need to have long cache age should be placed in `/dist/__VERSION__`. This will ensure your files will be pushed to the S3 bucket correctly with the desired caching policy.
+ 2. Your top-level files, which will have short cache age, must be placed directly under `/dist`, and the asset files that need to have long cache age should be placed in `/dist/__VERSION__`. This will ensure your files will be pushed to the S3 bucket correctly with the desired caching policy.
 
 ### `Gruntfile.js`
 The template project use Grunt as our build system. The asset files other than javascript are copied to the right locations with Grunt tasks defined in `Gruntfile.js`. Please take a look at the file and make necessary changes if your project is not structured like this template project.
