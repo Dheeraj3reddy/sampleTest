@@ -33,7 +33,7 @@ module.exports = {
   },
   devtool  : 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'dist/__VERSION__'),
+    contentBase: path.join(__dirname, 'dist'),
 
     // overlay: true captures only errors
     overlay: {

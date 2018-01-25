@@ -29,8 +29,8 @@ module.exports = function (grunt) {
           dest: './dist/__VERSION__'
         }]
       }
-    },
 */
+    },
     webpack: {
       options: webpackConfig,
       build: {
@@ -70,7 +70,7 @@ module.exports = function (grunt) {
   // Production build
   grunt.registerTask('build', [
     'clean-all',
-    'copy:top_level',
+    // 'copy:top_level',
     'copy:assets',
     'webpack:build'
   ]);
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
   // dev build with un-minified dc-signature-panel-bundle.js
   grunt.registerTask('build-dev', [
     'clean-all',
-    'copy:top_level',
+    // 'copy:top_level',
     'copy:assets',
     'webpack:build-dev'
   ]);
