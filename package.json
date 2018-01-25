@@ -1,6 +1,6 @@
 {
   "name": "cdnexample",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "example project for CI/CD pipeline for static assets",
   "main": "index.js",
   "scripts": {
