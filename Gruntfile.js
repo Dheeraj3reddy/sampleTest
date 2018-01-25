@@ -16,22 +16,21 @@ module.exports = function (grunt) {
           // This is to copy css, images and localized strings
           expand: true,
           cwd: '.',
-          src: ['css/**', 'images/**'],
+          src: ['css/**', 'images/**', 'index.html'],
           dest: './dist/__VERSION__/'
         }]
       },
-
+/*
       top_level: {
         files: [{
-          // This is to copy the favicon
           expand: true,
           cwd: '.',
-          src: ['index.html', 'favicon.ico'],
-          dest: './dist/'
+          src: ['index.html'],
+          dest: './dist/__VERSION__'
         }]
       }
     },
-
+*/
     webpack: {
       options: webpackConfig,
       build: {
