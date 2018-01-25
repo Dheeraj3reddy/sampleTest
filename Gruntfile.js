@@ -16,22 +16,21 @@ module.exports = function (grunt) {
           // This is to copy css files
           expand: true,
           cwd: '.',
-          src: ['css/**'],
+          src: ['css/**', 'index.html'],
           dest: './dist/__VERSION__/'
         }]
       },
-
+/*
       top_level: {
         files: [{
-          // This is to copy the favicon
           expand: true,
           cwd: '.',
-          src: ['index.html', 'favicon.ico'],
+          src: ['index.html'],
           dest: './dist/'
         }]
       }
+*/
     },
-
     webpack: {
       options: webpackConfig,
       build: {
@@ -71,7 +70,7 @@ module.exports = function (grunt) {
   // Production build
   grunt.registerTask('build', [
     'clean-all',
-    'copy:top_level',
+    // 'copy:top_level',
     'copy:assets',
     'webpack:build'
   ]);
@@ -79,7 +78,7 @@ module.exports = function (grunt) {
   // dev build with un-minified dc-signature-panel-bundle.js
   grunt.registerTask('build-dev', [
     'clean-all',
-    'copy:top_level',
+    // 'copy:top_level',
     'copy:assets',
     'webpack:build-dev'
   ]);
