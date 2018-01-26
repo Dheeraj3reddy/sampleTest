@@ -10,8 +10,8 @@ var lib = require('./lib.js'),
   jQuery = require('jquery'),
   UiStrings = require('./nls/ui-strings');
 
-// Need to setup path at runtime, otherwise by default /__VERSION__/__VERSIOM__/nsl/translations_xx.js will be used
-// because webpack stores path to translated file in a form '__VERSION__/nsl/translation_xx.js' plus example html uses
+// Need to setup path at runtime, otherwise by default /__VERSION__/__VERSION__/nls/translations_xx.js will be used
+// because webpack stores path to translated file in a form '__VERSION__/nls/translation_xx.js' plus example html uses
 // <base href='__VERSION__'> so we end up with double __VERSION__/__VERSION__ path,
 //
 // Use relative '../' path to make sure it works locally and when deployed to CDN (that has format <url>/serviceName/...)
@@ -31,6 +31,7 @@ function startApp(lang) {
   UiStrings.loadTranslations(lang).then(function () {
     lib.sayHello();
     lib.showImageInfo();
+    lib.showReadMe();
   });
 }
 

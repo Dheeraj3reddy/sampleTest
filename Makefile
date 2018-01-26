@@ -64,6 +64,9 @@ run-uitest:
 
 ### Targets below this line are used for development and debugging purposes only ###
 
+build-deployer:
+	docker build -t $(IMAGE_TAG) .
+
 run-build-image-interactively:
 	docker run -v `pwd`:/build:z -i -t $(BUILDER_TAG) /bin/bash
 

@@ -13,23 +13,21 @@ module.exports = function (grunt) {
     copy: {
       assets: {
         files: [{
-          // This is to copy css, images and localized strings
+          // This is to copy css files
           expand: true,
           cwd: '.',
-          src: ['css/**', 'images/**', 'index.html'],
+          src: ['css/**'],
           dest: './dist/__VERSION__/'
         }]
       },
-/*
       top_level: {
         files: [{
           expand: true,
           cwd: '.',
           src: ['index.html'],
-          dest: './dist/__VERSION__'
+          dest: './dist/'
         }]
       }
-*/
     },
     webpack: {
       options: webpackConfig,
@@ -70,7 +68,7 @@ module.exports = function (grunt) {
   // Production build
   grunt.registerTask('build', [
     'clean-all',
-    // 'copy:top_level',
+    'copy:top_level',
     'copy:assets',
     'webpack:build'
   ]);
@@ -78,7 +76,7 @@ module.exports = function (grunt) {
   // dev build with un-minified dc-signature-panel-bundle.js
   grunt.registerTask('build-dev', [
     'clean-all',
-    // 'copy:top_level',
+    'copy:top_level',
     'copy:assets',
     'webpack:build-dev'
   ]);

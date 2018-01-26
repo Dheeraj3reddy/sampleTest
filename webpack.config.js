@@ -22,8 +22,29 @@ module.exports = {
           failOnWarning: false,
           failOnError: true
         }
-      }
-    ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[name]-[hash].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(md)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'docs/[name]-[hash].[ext]'
+            }
+          }
+        ]
+      }]
   },
 
   output: {

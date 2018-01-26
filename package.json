@@ -1,6 +1,6 @@
 {
   "name": "cdnexample",
-  "version": "0.1.0",
+  "version": "2.0.1",
   "description": "example project for CI/CD pipeline for static assets",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "chai": "~3.5.0",
     "eslint": "~3.19.0",
     "eslint-loader": "~1.7.1",
+    "file-loader": "~1.1.5",
     "grunt": "~1.0.1",
     "grunt-contrib-clean": "~1.0.0",
     "grunt-contrib-copy": "~1.0.0",
