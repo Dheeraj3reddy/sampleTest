@@ -31,13 +31,13 @@
 # dist/folder1/subfolder1 but *not* any other files under dist/folder1, list
 # “folder1/subfolder1”.
 #
-# The developers should use this feature with caution and be aware of the
-# implication of specifying custom long-cached folders: Since currently we
-# don’t flush CloudFront cache on a deployment, if the files under the folder
-# has fixed file names, the client of your website will *not* see the changes
-# in your new deployment until the cache is expired. When this feature is
-# used, it is recommended that the developers should use another mechanism
-# for expiring content, for example, put hashes in file names.
+# Developers must use this feature with caution and be aware of the implications
+# of specifying custom long-cached folders: These files are cached, in the CDN
+# and on client machines, for the long cache time. Therefore, if the files under
+# the folder have fixed file names, clients of your website will *not* see the
+# changes in your new deployment until the cache is expired. When this feature is used,
+# it is recommended that developers use another mechanism for expiring content.
+# For example, include hashes (based on file content) in file names.
 # SECOND_LEVEL_FOLDERS=<folder1>,<folder2>,...
 
 
