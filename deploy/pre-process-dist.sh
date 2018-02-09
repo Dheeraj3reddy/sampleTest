@@ -41,8 +41,9 @@ echo $default_lock_phrase > build-artifacts/default-lock-phrase.txt
 echo "Writing path prefix \"$PATH_PREFIX\" to build-artifacts/path-prefix.txt"
 echo $PATH_PREFIX > build-artifacts/path-prefix.txt
 
-echo "Copying copy-to-s3.sh to build-artifacts"
+echo "Copying copy-to-s3.sh & deploy-utils.sh to build-artifacts"
 cp /scripts/static-deploy/copy-to-s3.sh build-artifacts
+cp /scripts/static-deploy/deploy-utils.sh build-artifacts
 
 function read_deploy_config {
     file=$1
