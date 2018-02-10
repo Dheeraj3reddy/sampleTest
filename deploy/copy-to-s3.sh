@@ -200,11 +200,11 @@ do
     # If it is a rollback deployment, rename the manifest file as <file>.rollback.txt
     if [ "$rollback" == "true" ]; then
         echo "-- It's a rollback deployment. Renaming the manifest file for the previous deployment --"
-        prev_manifest="/manifests$path_prefix/$prev_version_string.txt"
+        prev_manifest="manifests$path_prefix/$prev_version_string.txt"
         prev_manifest_check=$(check_s3_object $bucket $prev_manifest)
         if [ -n "$prev_manifest_check" ]; then
-            echo "-- Renaming s3://$bucket$prev_manifest as s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt --"
-            aws s3 mv s3://$bucket$prev_manifest s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt
+            echo "-- Renaming s3://$bucket/$prev_manifest as s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt --"
+            aws s3 mv s3://$bucket/$prev_manifest s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt
         else
             echo "s3://$bucket$prev_manifest does not exist"
         fi
