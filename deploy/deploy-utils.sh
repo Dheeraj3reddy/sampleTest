@@ -10,6 +10,7 @@
 #
 function read_deploy_config {
     file=$1
+    env_prefix=$2
 
     # Append a newline at the end of the file so that all lines can be correctly read
     echo "" >> $file
@@ -21,7 +22,7 @@ function read_deploy_config {
             value=`echo $value | tr -d '\r'`
             echo "key=$key, value=$value"
             if [[ -n "$key" && ! $key =~ ^#.*$ && -n "$value" ]]; then
-                eval "${key}='${value}'"
+                eval "${env_prefix}${key}='${value}'"
             fi
         done < "$file"
     fi
