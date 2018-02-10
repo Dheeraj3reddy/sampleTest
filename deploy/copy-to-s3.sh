@@ -114,8 +114,12 @@ fi
 # If it is a rollback Determine the previous version string being used
 prev_version_string=''
 if [ "$rollback" == "true" ]; then
+    sha_file=/prev-deploy/build-artifacts/sha.txt
+    echo "Reading previous Git sha from $sha_file"
+    prev_sha=`cat $sha_file`
+    echo "Previous Git sha is \"$prev_sha\""
     if [ -z "$PREV_VERSION" ]; then
-        prev_version_string=$previous_sha
+        prev_version_string=$prev_sha
     else
         prev_version_string=$PREV_VERSION
     fi
@@ -195,7 +199,7 @@ for bucket in "${buckets[@]}"
 do
     # If it is a rollback deployment, rename the manifest file as <file>.rollback.txt
     if [ "$rollback" == "true" ]; then
-        echo "-- It's a rollback depoyment. Renaming the manifest file for the previous deployment --"
+        echo "-- It's a rollback deployment. Renaming the manifest file for the previous deployment --"
         prev_manifest="manifests$path_prefix/$prev_version_string.txt"
         prev_manifest_check=$(check_s3_object $bucket $prev_manifest)
         if [ -n "$prev_manifest_check" ]; then
