@@ -143,7 +143,7 @@ if [ -n "$sha_check" ]; then
     aws s3 cp s3://$bucket/dist$version_sha_path sha.txt
     remote_sha=`cat sha.txt`
     if [ "$sha" != "$remote_sha" ]; then
-        echo "The current sha '$sha' does not match the content of $version_sha_path '$remote_sha' -- aborting deployment"
+        echo "The current sha '$sha' does not match the content of $version_sha_path '$remote_sha' (forgot to bump your version?) -- aborting deployment"
         exit 1
     else
         echo "The current sha '$sha' match the content of $version_sha_path"
@@ -207,6 +207,7 @@ do
 
     s3_dest=s3://$bucket/dist$path_prefix
     manifest_dest=s3://$bucket/manifests$path_prefix/$version_string.txt
+    manifest_rollback=manifests$path_prefix/$version_string.rollback.txt
 
     # This variable will accumulate the "--exclude xxx" arguments needed for the AWS CLI to
     # exclude folders that we push first with long cache time when we push the top level assets.
@@ -313,5 +314,12 @@ do
 
     echo "--- Pushing $manifest_src to $manifest_dest ---"
     aws s3 cp $manifest_src $manifest_dest
+
+    # If the rollback marker is there, delete it.
+    rollback_check=$(check_s3_object $bucket $manifest_rollback)
+    if [ -n "$rollback_check" ]; then
+        echo "--- Deleting s3://$bucket/$manifest_rollback ---"
+        aws s3 rm s3://$bucket/$manifest_rollback
+    fi
 done
 
