@@ -97,6 +97,8 @@ run-deployer-image:
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
+	-e DEPLOY_TEST_FOLDERS \
+	-e rollback \
 	$(IMAGE_TAG)
 
 	@docker run \
@@ -106,5 +108,7 @@ run-deployer-image:
 	-e AWS_ROLE=$(AWS_ROLE) \
 	-e S3_BUCKETS=$(S3_BUCKETS) \
 	-e LOCK_PHRASE=$(LOCK_PHRASE) \
+	-e DEPLOY_TEST_FOLDERS \
+	-e rollback \
 	$(IMAGE_TAG)
 
