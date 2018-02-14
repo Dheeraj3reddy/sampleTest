@@ -3,6 +3,23 @@
 # Exit on failure
 set -e
 
+# Get the path of this script.
+pushd . > /dev/null
+script_path="${BASH_SOURCE[0]}";
+if [ -h "${script_path}" ]; then
+    while [ -h "${script_path}" ]; do
+        cd `dirname "$script_path"`; script_path=`readlink "${script_path}"`
+    done
+fi
+cd `dirname ${script_path}` > /dev/null
+script_path=`pwd`;
+popd  > /dev/null
+
+# Include the deploy-utils.sh file
+echo "Loading $script_path/deploy-utils.sh"
+. $script_path/deploy-utils.sh
+
+
 VERSION_PLACEHOLDER=__VERSION__
 
 if [ -e build-artifacts ]; then
@@ -44,25 +61,6 @@ echo $PATH_PREFIX > build-artifacts/path-prefix.txt
 echo "Copying copy-to-s3.sh & deploy-utils.sh to build-artifacts"
 cp /scripts/static-deploy/copy-to-s3.sh build-artifacts
 cp /scripts/static-deploy/deploy-utils.sh build-artifacts
-
-function read_deploy_config {
-    file=$1
-
-    # Append a newline at the end of the file so that all lines can be correctly read
-    echo "" >> $file
-
-    if [ -f "$file" ]; then
-        echo "Importing $file"
-        while IFS='= ' read -r key value
-        do
-            value=`echo $value | tr -d '\r'`
-            echo "key=$key, value=$value"
-            if [[ -n "$key" && ! $key =~ ^#.*$ && -n "$value" ]]; then
-                eval "${key}='${value}'"
-            fi
-        done < "$file"
-    fi
-}
 
 # If the deployment config file exists, copy the file to build-artifacts and read it.
 if [ -f "deploy.config" ]; then

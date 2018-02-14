@@ -6,11 +6,9 @@
 # the key-vaue pairs into environment variable-value pairs.
 # Parameters:
 # $1=file: path to the deploy.config file to be read
-# $2=env_prefix: prefix for environment variables being created from the deploy.config file
 #
 function read_deploy_config {
     file=$1
-    env_prefix=$2
 
     # Append a newline at the end of the file so that all lines can be correctly read
     echo "" >> $file
@@ -22,7 +20,7 @@ function read_deploy_config {
             value=`echo $value | tr -d '\r'`
             echo "key=$key, value=$value"
             if [[ -n "$key" && ! $key =~ ^#.*$ && -n "$value" ]]; then
-                eval "${env_prefix}${key}='${value}'"
+                eval "${key}='${value}'"
             fi
         done < "$file"
     fi
