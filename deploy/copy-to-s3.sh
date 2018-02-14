@@ -64,10 +64,6 @@ SECOND_LEVEL_MAX_AGE=86400
 # cache times specified above
 read_deploy_config "build-artifacts/deploy.config"
 
-if [ "$rollback" == "true" ]; then
-    read_deploy_config /prev-deploy/build-artifacts/deploy.config "PREV_"
-fi
-
 echo "Reading path prefix from build-artifacts/path-prefix.txt"
 path_prefix=`cat build-artifacts/path-prefix.txt`
 echo "path prefix is \"$path_prefix\""
@@ -99,11 +95,6 @@ fi
 
 IFS=', ' read -r -a buckets <<< $S3_BUCKETS
 
-for bucket in "${buckets[@]}"
-do
-    validate_path_prefix $bucket $path_prefix
-done
-
 # Determine the version string being used for this deployment
 if [ -z "$VERSION" ]; then
     version_string=$sha
@@ -111,18 +102,32 @@ else
     version_string=$VERSION
 fi
 
-# If it is a rollback Determine the previous version string being used
-prev_version_string=''
-if [ "$rollback" == "true" ]; then
-    sha_file=/prev-deploy/build-artifacts/sha.txt
-    echo "Reading previous Git sha from $sha_file"
-    prev_sha=`cat $sha_file`
-    echo "Previous Git sha is \"$prev_sha\""
-    if [ -z "$PREV_VERSION" ]; then
-        prev_version_string=$prev_sha
+for bucket in "${buckets[@]}"
+do
+    # If it is a rollback deployment, upload a rollback marker <version_string>.rollback.txt
+    if [ "$rollback" == "true" ]; then
+        echo "-- It's a rollback deployment --"
+
+        # Only upload rollback marker if the corresponding manifest file exists.
+        manifest_file="manifests$path_prefix/$version_string.txt"
+        manifest_check=$(check_s3_object $bucket $manifest_file)
+        if [ -n "$manifest_check" ]; then
+            tmpfile=$(mktemp /tmp/rollback.XXXXXX)
+            echo $sha > $tmpfile
+            echo "-- Uploading s3://$bucket/manifests$path_prefix/$version_string.rollback.txt --"
+            aws s3 cp $tmpfile s3://$bucket/manifests$path_prefix/$version_string.rollback.txt
+            rm $tmpfile
+        else
+            echo "s3://$bucket/$manifest_file does not exist"
+        fi
     else
-        prev_version_string=$PREV_VERSION
+        validate_path_prefix $bucket $path_prefix
     fi
+done
+
+# If this is a rollback, we should stop here.
+if [ "$rollback" == "true" ]; then
+    exit 0
 fi
 
 # At this point, we are sure the project is the rightful owner of the destination path.
@@ -197,19 +202,6 @@ fi
 
 for bucket in "${buckets[@]}"
 do
-    # If it is a rollback deployment, rename the manifest file as <file>.rollback.txt
-    if [ "$rollback" == "true" ]; then
-        echo "-- It's a rollback deployment. Renaming the manifest file for the previous deployment --"
-        prev_manifest="manifests$path_prefix/$prev_version_string.txt"
-        prev_manifest_check=$(check_s3_object $bucket $prev_manifest)
-        if [ -n "$prev_manifest_check" ]; then
-            echo "-- Renaming s3://$bucket/$prev_manifest as s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt --"
-            aws s3 mv s3://$bucket/$prev_manifest s3://$bucket/manifests$path_prefix/$prev_version_string.rollback.txt
-        else
-            echo "s3://$bucket$prev_manifest does not exist"
-        fi
-    fi
-
     echo ---------- Pushing to S3: $bucket ----------
     create_lock $bucket $path_prefix
 
