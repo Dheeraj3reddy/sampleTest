@@ -17,6 +17,13 @@
 #   (default 1 day). All other files will be assigned a short cache time
 #   (default 1 minute).
 
+# Getting "_auth" and "email" values from Artifactory for .npmrc file.
+# Assumption: ARTIFACTORY_USER and ARTIFACTORY_API_TOKEN need to have
+# already been defined in the environment.
+auth=$(curl -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.adobe.com/artifactory/api/npm/auth)
+export NPM_AUTH=$(echo "$auth" | grep "_auth" | awk -F " " '{ print $3 }')
+export NPM_EMAIL=$(echo "$auth" | grep "email" | awk -F " " '{ print $3 }')
+
 # Append the git sha to the version in package.json if $PUSH_ARTIFACTS exists.
 # it is usually the case when the script is running in the BUILD job.
 if [ -n "$PUSH_ARTIFACTS" ]; then

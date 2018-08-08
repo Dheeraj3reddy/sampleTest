@@ -12,12 +12,24 @@ default: ci
 # which should build the project and run unit tests, and optionally, code coverage.
 ci: run-builder
 ifeq ($(RUN_COVERAGE),true)
-	docker run \
+	@echo Executing: docker run \
 	-v `pwd`:/build:z \
 	-e COVERALLS_SERVICE_NAME=$(COVERALLS_SERVICE_NAME) \
 	-e COVERALLS_REPO_TOKEN=$(COVERALLS_REPO_TOKEN) \
 	-e COVERALLS_ENDPOINT=$(COVERALLS_ENDPOINT) \
 	-e CI_PULL_REQUEST=$(ghprbPullId) \
+	-e ARTIFACTORY_API_TOKEN=*** \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
+	$(BUILDER_TAG) /build/run-coverage.sh
+
+	@docker run \
+	-v `pwd`:/build:z \
+	-e COVERALLS_SERVICE_NAME=$(COVERALLS_SERVICE_NAME) \
+	-e COVERALLS_REPO_TOKEN=$(COVERALLS_REPO_TOKEN) \
+	-e COVERALLS_ENDPOINT=$(COVERALLS_ENDPOINT) \
+	-e CI_PULL_REQUEST=$(ghprbPullId) \
+	-e ARTIFACTORY_API_TOKEN=$(ARTIFACTORY_API_TOKEN) \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
 	$(BUILDER_TAG) /build/run-coverage.sh
 else
 	@echo "No test coverage to run"
@@ -33,16 +45,16 @@ run-builder:
 	-v `pwd`:/build:z \
 	-e PATH_PREFIX=$(PATH_PREFIX) \
 	-e PUSH_ARTIFACTS=$(PUSH_ARTIFACTS) \
-	-e NPM_AUTH=*** \
-	-e NPM_EMAIL=$(NPM_EMAIL) \
+	-e ARTIFACTORY_API_TOKEN=*** \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
 	$(BUILDER_TAG)
 
 	@docker run \
 	-v `pwd`:/build:z \
 	-e PATH_PREFIX=$(PATH_PREFIX) \
 	-e PUSH_ARTIFACTS=$(PUSH_ARTIFACTS) \
-	-e NPM_AUTH=$(NPM_AUTH) \
-	-e NPM_EMAIL=$(NPM_EMAIL) \
+	-e ARTIFACTORY_API_TOKEN=$(ARTIFACTORY_API_TOKEN) \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
 	$(BUILDER_TAG)
 
 # This target is called by the Jenkins "build" job.
@@ -57,10 +69,19 @@ build: run-builder
 # Runs the uitest image to launch the UI test.
 run-uitest:
 	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
-	docker run \
+	@echo Executing: docker run \
 	-v `pwd`:/build:z \
 	-e PATH_PREFIX=$(PATH_PREFIX) \
-	-t $(BUILDER_TAG) /build/run-uitest.sh
+	-e ARTIFACTORY_API_TOKEN=*** \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
+	$(BUILDER_TAG) /build/run-uitest.sh
+
+	@docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX=$(PATH_PREFIX) \
+	-e ARTIFACTORY_API_TOKEN=$(ARTIFACTORY_API_TOKEN) \
+	-e ARTIFACTORY_USER=$(ARTIFACTORY_USER) \
+	$(BUILDER_TAG) /build/run-uitest.sh
 
 ### Targets below this line are used for development and debugging purposes only ###
 
