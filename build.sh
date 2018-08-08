@@ -51,7 +51,7 @@ if [[ -n "$PUSH_ARTIFACTS" && -n "$package_version" && -d dist-test ]]; then
 registry=https://artifactory.corp.adobe.com/artifactory/api/npm/npm-dcloud/
 _auth=$NPM_AUTH
 email=$NPM_EMAIL
-always-auth=false
+always-auth=true
 EOF
 
     # If the publishing version is already in the artifactory, don't need to publish again.
