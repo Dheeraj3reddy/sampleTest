@@ -24,8 +24,6 @@ auth=$(curl -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.
 export NPM_AUTH=$(echo "$auth" | grep "_auth" | awk -F " " '{ print $3 }')
 export NPM_EMAIL=$(echo "$auth" | grep "email" | awk -F " " '{ print $3 }')
 
-echo "auth: $auth"
-
 # Append the git sha to the version in package.json if $PUSH_ARTIFACTS exists.
 # it is usually the case when the script is running in the BUILD job.
 if [ -n "$PUSH_ARTIFACTS" ]; then
