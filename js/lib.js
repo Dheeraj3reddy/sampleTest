@@ -19,6 +19,7 @@ function sayHello() {
 function showImageInfo() {
   // insert all images into image-list div
   var imageList = jQuery('.image-list');
+  imageList.empty();
   _.each(images, function (imageUrl) {
     if (imageUrl.charAt(0) !== '/') {
       imageUrl = '../' + imageUrl;
