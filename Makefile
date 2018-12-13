@@ -8,6 +8,10 @@ IMAGE_TAG=$(SERVICE_NAME)-s3
 
 default: ci
 
+login:
+	@echo docker login -u ARTIFACTORY_USER -p ARTIFACTORY_API_TOKEN docker-asr-release.dr.corp.adobe.com
+	@docker login -u $(ARTIFACTORY_USER) -p $(ARTIFACTORY_API_TOKEN) docker-asr-release.dr.corp.adobe.com
+
 # This target is called by the Jenkins "ci" job. It builds and runs the builder image,
 # which should build the project and run unit tests, and optionally, code coverage.
 ci: run-builder
@@ -39,7 +43,7 @@ endif
 # tests, and then prepares the artifacts for deployment (moving them into the hash
 # folder, preparing the manifest, etc.). The results are placed in the current
 # directory of the local file system.
-run-builder:
+run-builder: login
 	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
 	@echo Executing: docker run \
 	-v `pwd`:/build:z \
@@ -67,7 +71,7 @@ build: run-builder
 
 # This target is called by the Jenkins "ui-test" job.
 # Runs the uitest image to launch the UI test.
-run-uitest:
+run-uitest: login
 	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
 	@echo Executing: docker run \
 	-v `pwd`:/build:z \
@@ -85,7 +89,7 @@ run-uitest:
 
 ### Targets below this line are used for development and debugging purposes only ###
 
-build-deployer:
+build-deployer: login
 	docker build -t $(IMAGE_TAG) .
 
 run-build-image-interactively:
