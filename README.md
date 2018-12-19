@@ -2,6 +2,17 @@
 
 This is a starter project for onboarding to the CI/CD pipeline for static content.
 
+## Artifactory Authentication ##
+You must have an Artifactory username and API key to build this project.
+Your Artifactory username is your LDAP username.
+Your Artifactory API key can be obtained by following [these instructions](https://wiki.corp.adobe.com/x/O5EdRQ#APIKeys-UserAccounts).
+
+Your username and API key must be exported via your `.profile` or `.bash_profile` in order to build with IntelliJ IDEA or via the command line:
+```
+export ARTIFACTORY_USER=<Artifactory username>
+export ARTIFACTORY_API_TOKEN=<Artifactory API key>
+```
+
 ## Clone the project and create a new repository
 First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name. The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of the original services which might already be using dashes. Throughout this document we will refer to this name as `<servicename>`.
 ```
