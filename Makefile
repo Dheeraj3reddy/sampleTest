@@ -21,7 +21,7 @@ login:
 # (i.e. when a ci job and a build job run at the same time) we override the image tag for ci jobs by adding a git sha
 # provided by Jenkins.
 ci: IMAGE_TAG := $(if $(sha),$(IMAGE_TAG)-ci-$(sha),$(IMAGE_TAG))
-ci: run-builder
+ci: build
 ifeq ($(RUN_COVERAGE),true)
 	docker run \
 	-v `pwd`:/build:z \
@@ -36,12 +36,14 @@ else
 	@echo "No test coverage to run"
 endif
 
-# Builds and runs the builder image, which builds the project and runs unit
-# tests, and then prepares the artifacts for deployment (moving them into the hash
-# folder, preparing the manifest, etc.). The results are placed in the current
-# directory of the local file system.
-run-builder: login
+# This target is called by the Jenkins "build" job.
+build: login
+	# First, build and run the builder image.
 	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	# Run the builder image to do the actual code build, run unit tests,
+	# and prepare the artifacts for deployment (move them into the hash
+	# folder, prepare the manifest, etc.). The results are placed in the current
+	# directory of the local file system.
 	docker run \
 	-v `pwd`:/build:z \
 	-e PATH_PREFIX \
@@ -51,13 +53,8 @@ run-builder: login
 	-e TESSA2_API_KEY \
 	-e RUN_TESSA \
 	$(BUILDER_TAG)
-
-# This target is called by the Jenkins "build" job.
-# After running "run-builder" to produce the built static content on the local
-# file system, this target picks up the content and packages it into a
-# deployer image. This deployer image knows how to push the artifacts
-# to S3 when run.
-build: run-builder
+	# Package the built content it into a deployer image.
+	# This deployer image knows how to push the artifacts to S3 when run.
 	docker build -t $(IMAGE_TAG) .
 
 # This target is called by the Jenkins "ui-test" job.
@@ -72,9 +69,6 @@ run-uitest: login
 	$(BUILDER_TAG) /build/run-uitest.sh
 
 ### Targets below this line are used for development and debugging purposes only ###
-
-build-deployer: login
-	docker build -t $(IMAGE_TAG) .
 
 run-build-image-interactively:
 	docker run -v `pwd`:/build:z -i -t $(BUILDER_TAG) /bin/bash
