@@ -33,7 +33,7 @@ ifeq ($(RUN_COVERAGE),true)
 	-e ARTIFACTORY_USER \
 	$(BUILDER_TAG) /build/run-coverage.sh
 else
-	@echo "No test coverage to run"
+	echo "No test coverage to run"
 endif
 
 # This target is called by the Jenkins "build" job.
