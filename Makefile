@@ -79,7 +79,7 @@ run-build-image-interactively:
 	-e ARTIFACTORY_USER \
 	-e TESSA2_API_KEY \
 	-e RUN_TESSA \
-	 -i -t $(BUILDER_TAG) /bin/bash
+	-i -t $(BUILDER_TAG) /bin/bash
 
 run-deployer-image-interactively:
 	docker run \
