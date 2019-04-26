@@ -71,7 +71,15 @@ run-uitest: login
 ### Targets below this line are used for development and debugging purposes only ###
 
 run-build-image-interactively:
-	docker run -v `pwd`:/build:z -i -t $(BUILDER_TAG) /bin/bash
+	docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX \
+	-e PUSH_ARTIFACTS \
+	-e ARTIFACTORY_API_TOKEN \
+	-e ARTIFACTORY_USER \
+	-e TESSA2_API_KEY \
+	-e RUN_TESSA \
+	 -i -t $(BUILDER_TAG) /bin/bash
 
 run-deployer-image-interactively:
 	docker run \
@@ -81,6 +89,8 @@ run-deployer-image-interactively:
 	-e AWS_ROLE \
 	-e S3_BUCKETS \
 	-e LOCK_PHRASE \
+	-e DEPLOY_TEST_FOLDERS \
+	-e rollback \
 	-i -t $(IMAGE_TAG) /bin/bash
 
 run-deployer-image:
