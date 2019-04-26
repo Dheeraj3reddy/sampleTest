@@ -104,4 +104,3 @@ run-deployer-image:
 	-e DEPLOY_TEST_FOLDERS \
 	-e rollback \
 	$(IMAGE_TAG)
-
