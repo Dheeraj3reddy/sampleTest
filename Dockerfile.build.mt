@@ -1,3 +1,3 @@
-FROM docker-asr-release.dr.corp.adobe.com/asr/static_builder_node_v8:3.8
+FROM docker-asr-release.dr.corp.adobe.com/asr/static_builder_node_v8:3.11
 
 RUN apt-get update && apt-get install -y libpng-dev
