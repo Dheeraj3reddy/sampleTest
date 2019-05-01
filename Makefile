@@ -51,7 +51,6 @@ build: login
 	-e ARTIFACTORY_API_TOKEN \
 	-e ARTIFACTORY_USER \
 	-e TESSA2_API_KEY \
-	-e RUN_TESSA \
 	$(BUILDER_TAG)
 	# Package the built content it into a deployer image.
 	# This deployer image knows how to push the artifacts to S3 when run.
@@ -78,7 +77,6 @@ run-build-image-interactively:
 	-e ARTIFACTORY_API_TOKEN \
 	-e ARTIFACTORY_USER \
 	-e TESSA2_API_KEY \
-	-e RUN_TESSA \
 	-i -t $(BUILDER_TAG) /bin/bash
 
 run-deployer-image-interactively:
