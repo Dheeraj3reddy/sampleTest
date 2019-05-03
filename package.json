@@ -1,6 +1,6 @@
 {
   "name": "cdnexample",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "example project for CI/CD pipeline for static assets",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "start": "webpack-dev-server",
     "watch": "webpack --progress --watch",
     "test": "grunt test",
-    "postinstall": "echo 'nothing to do for postinstall'"
+    "postinstall": "echo 'nothing to do for postinstall'",
+    "report-dependencies-tessa": "bash ./tessa-npm-plugin.sh update",
+    "test-dependencies-tessa": "bash ./tessa-npm-plugin.sh check --errorOnNewVulnerability"
   },
   "repository": {
     "type": "git",

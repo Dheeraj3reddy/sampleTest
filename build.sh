@@ -44,6 +44,12 @@ npm install
 npm run build
 npm run test
 
+# Report dependencies to TESSA
+if [ -n "$TESSA2_API_KEY" ]; then
+    echo "TESSA2_API_KEY found. Reporting dependencies to TESSA"
+    npm run report-dependencies-tessa
+fi
+
 # Publish page objects if $PUSH_ARTIFACTS exists.
 if [[ -n "$PUSH_ARTIFACTS" && -n "$package_version" && -d dist-test ]]; then
     cd dist-test
