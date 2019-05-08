@@ -12,7 +12,7 @@
 # folder in dist/ and the SECOND_LEVEL_FOLDERS listed below are considered
 # second-level content. Everything other than that are considered top-level
 # content. By default, the max-age value for top-level and second-level
-# content is 60 and 86400 (1 day), respectively.
+# content is 60 and 2592000 (30 days), respectively.
 # TOP_LEVEL_MAX_AGE=<short_cache_time>
 # SECOND_LEVEL_MAX_AGE=<long_cache_time>
 
