@@ -4,53 +4,31 @@
 /* global require, module */
 
 var jQuery = require('jquery'),
-  _ = require('underscore'),
   UiStrings = require('./nls/ui-strings'),
   images = [
     require('../images/Bethoven.png'),
     require('../images/obama-signature.jpg')],
-  readMeUrl = require('../README.md');
+  readMeUrl = require('../README.md'),
+  exampleLib = require('@cdnexample/cdnexamplelib');
 
 function sayHello() {
   // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadTranslations()
-  jQuery('.title').html(UiStrings.getTranslatedString('helloWorldMsg'));
+  exampleLib.insertText('.title', UiStrings.getTranslatedString('helloWorldMsg'));
 }
 
 function showImageInfo() {
-  // insert all images into image-list div
-  var imageList = jQuery('.image-list');
-  imageList.empty();
-  _.each(images, function (imageUrl) {
-    if (imageUrl.charAt(0) !== '/') {
-      imageUrl = '../' + imageUrl;
-    }
-    var imageDiv = jQuery('<div class="sample-image">\n' +
-      '    <img src="' + imageUrl +'">\n' +
-      '  </div>');
-    imageList.append(imageDiv);
-  });
+  // show images in the div with class 'image-list'
+  exampleLib.showImages('.image-list', images);
 
   // populate image info
   var imageInfoMsg = UiStrings.getTranslatedString('imageInfoMsg')
-      .replace('{numImages}', images.length),
-    info = '<div>' + imageInfoMsg + '</div><ul>';
-  info += _.reduce(images, function(imgItems, imageUrl) {
-    return imgItems + '<li>' + imageUrl + '</li>';
-  }, '');
-  info += '</ul>';
-  jQuery('.image-info').html(info);
+      .replace('{numImages}', images.length);
+  exampleLib.showImageInfo(imageInfoMsg, '.image-info', images);
 }
 
 function showReadMe() {
-  jQuery.ajax({
-    url: '../' + readMeUrl,
-    method: 'GET',
-    accepts: {
-      all: '*/*'
-    },
-    dataType: 'text'
-  })
-    .done(function (data) {
+  exampleLib.loadText('../' + readMeUrl)
+    .then(function (data) {
       jQuery('.readme pre').text(data);
     });
 }

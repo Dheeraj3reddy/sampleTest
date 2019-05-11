@@ -1,6 +1,6 @@
 {
   "name": "cdnexample",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "example project for CI/CD pipeline for static assets",
   "main": "index.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "webpack-dev-server": "~2.4.2"
   },
   "dependencies": {
+    "@cdnexample/cdnexamplelib": "0.0.1",
     "es6-promise": "~4.1.0",
     "jquery": "~3.1.1",
     "underscore": "~1.8.3"
