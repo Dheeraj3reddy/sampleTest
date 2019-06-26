@@ -58,11 +58,21 @@ always-auth=true
 EOF
 
     # If you would like to publish an NPM package, it is assumed that
-    # "npm run build" will generate a package.json file in the dist folder
+    # "npm run build" will generate a package.json file in the dist-pub folder
     # with the right package name and version being published and a valid
     # registry URL in publishConfig.
     package_name=$([[ "`grep \"\\\"name\\\"[[:blank:]]*:\" package.json`" =~ \"name\".*\"(.*)\" ]] && echo ${BASH_REMATCH[1]})
     package_version=$([[ "`grep \"\\\"version\\\"[[:blank:]]*:\" package.json`" =~ \"version\".*\"(.*)\" ]] && echo ${BASH_REMATCH[1]})
+
+    if [ -z "$package_name" ]; then
+        echo "No 'name' property found in package.json! Publishing cannot continue."
+        exit 1
+    fi
+
+    if [ -z "$package_version" ]; then
+        echo "No 'version' property found in package.json! Publishing cannot continue."
+        exit 1
+    fi
 
     # If the publishing version is already in the artifactory, don't need to publish again.
     version_found=`npm view $package_name versions | grep "$package_version" || true`
