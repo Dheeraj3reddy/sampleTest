@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# -e to exit on first error.
 
 # This script is responsible for building the project's static content.
 #
@@ -17,12 +18,17 @@
 #   (default 1 day). All other files will be assigned a short cache time
 #   (default 1 minute).
 
-# Getting "_auth" and "email" values from Artifactory for .npmrc file.
-# Assumption: ARTIFACTORY_USER and ARTIFACTORY_API_TOKEN need to have
-# already been defined in the environment.
-auth=$(curl -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.adobe.com/artifactory/api/npm/auth)
-export NPM_AUTH=$(echo "$auth" | grep "_auth" | awk -F " " '{ print $3 }')
-export NPM_EMAIL=$(echo "$auth" | grep "email" | awk -F " " '{ print $3 }')
+if [[ -n "$ARTIFACTORY_USER" ]]; then
+    # Get "email" and "_auth" values from Artifactory for .npmrc file.
+    # Assumption: ARTIFACTORY_USER and ARTIFACTORY_API_TOKEN need to have
+    # already been defined in the environment.
+    auth=$(curl -s -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.adobe.com/artifactory/api/npm/auth)
+else
+    # If missing $ARTIFACTORY_USER, try the user-level .npmrc file.
+    auth=$(<~/.npmrc)
+fi
+[[ "$auth" =~ email\ *=\ *([[:graph:]]*) ]]; export NPM_EMAIL="${BASH_REMATCH[1]}"
+[[ "$auth" =~ _auth\ *=\ *([[:graph:]]*) ]]; export NPM_AUTH="${BASH_REMATCH[1]}"
 
 # It is assumed that the build result being deployed to S3/CDN will be stored
 # in the "dist" folder, and if you want to publish an NPM package to the
@@ -75,12 +81,13 @@ EOF
     fi
 
     # If the publishing version is already in the artifactory, don't need to publish again.
-    version_found=`npm view $package_name versions | grep "$package_version" || true`
+    # Ignore any not-found exit error using || true since we look for a non-zero length string.
+    version_found=`npm view $package_name versions | grep "$package_version"` || true
     if [ -z "$version_found" ]; then
         echo "Publishing $package_name@$package_version"
         npm publish
-        echo "Page objects published: $package_name@$package_version"
+        echo "Package published: $package_name@$package_version"
     else
-        echo "The page objects package $package_name@$package_version is already in the artifactory. Skipping publishing"
+        echo "The package $package_name@$package_version is already in the artifactory. Skipping publishing"
     fi
 fi
