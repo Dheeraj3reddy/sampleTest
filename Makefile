@@ -39,7 +39,7 @@ endif
 # This target is called by the Jenkins "build" job.
 build: login
 	# First, build and run the builder image.
-	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
 	# Run the builder image to do the actual code build, run unit tests,
 	# and prepare the artifacts for deployment (move them into the hash
 	# folder, prepare the manifest, etc.). The results are placed in the current
@@ -54,12 +54,12 @@ build: login
 	$(BUILDER_TAG)
 	# Package the built content it into a deployer image.
 	# This deployer image knows how to push the artifacts to S3 when run.
-	docker build -t $(IMAGE_TAG) .
+	docker build --pull -t $(IMAGE_TAG) .
 
 # This target is called by the Jenkins "ui-test" job.
 # Runs the uitest image to launch the UI test.
 run-uitest: login
-	docker build -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
 	docker run \
 	-v `pwd`:/build:z \
 	-e PATH_PREFIX \
