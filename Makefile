@@ -67,6 +67,18 @@ run-uitest: login
 	-e ARTIFACTORY_USER \
 	$(BUILDER_TAG) /build/run-uitest.sh
 
+# This target is called by the Jenkins "cdn-postmerge" job.
+# Runs the build image to launch the post-merge script.
+run-postmerge-hook: login
+	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
+	docker run \
+	-v `pwd`:/build:z \
+	-e PATH_PREFIX \
+	-e ARTIFACTORY_API_TOKEN \
+	-e ARTIFACTORY_USER \
+	-e ENV_NAME \
+	$(BUILDER_TAG) /build/run-postmerge-hook.sh
+
 ### Targets below this line are used for development and debugging purposes only ###
 
 run-build-image-interactively:
