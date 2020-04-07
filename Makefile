@@ -76,7 +76,6 @@ run-postmerge-hook: login
 	-e PATH_PREFIX \
 	-e ARTIFACTORY_API_TOKEN \
 	-e ARTIFACTORY_USER \
-	-e GITHUB_TOKEN \
 	$(BUILDER_TAG) /build/run-postmerge-hook.sh
 
 ### Targets below this line are used for development and debugging purposes only ###
