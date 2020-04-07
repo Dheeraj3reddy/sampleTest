@@ -19,3 +19,6 @@ then
 else
       echo "\$GITHUB_TOKEN is NOT empty"
 fi
+
+curl -v -H "Authorization: token $GITHUB_TOKEN" https://git.corp.adobe.com/EchoSign/cdnexample
+
