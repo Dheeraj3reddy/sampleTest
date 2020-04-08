@@ -15,9 +15,9 @@ export NPM_EMAIL=$(echo "$auth" | grep "email" | awk -F " " '{ print $3 }')
 echo "Running post-merge hook."
 if [ -z "$GITHUB_TOKEN" ]
 then
-      echo "\$GITHUB_TOKEN is empty"
+    echo "\$GITHUB_TOKEN is empty"
 else
-      echo "\$GITHUB_TOKEN is NOT empty"
+    echo "\$GITHUB_TOKEN is NOT empty"
+    curl -v -H "Authorization: token $GITHUB_TOKEN" https://git.corp.adobe.com/EchoSign/cdnexample
 fi
 
-curl -v -H "Authorization: token $GITHUB_TOKEN" https://git.corp.adobe.com/EchoSign/cdnexample
