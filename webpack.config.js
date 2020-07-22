@@ -64,7 +64,7 @@ module.exports = {
 
     port: 9000,
     publicPath: '/',
-    host: 'secure.local.echocdn.com',
+    host: 'secure.local.adobesigncdn.com',
 
     // comment out the following 3 lines if you don't want HTTPS support
     https: true,
