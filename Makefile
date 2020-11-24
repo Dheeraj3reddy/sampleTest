@@ -4,7 +4,7 @@ endif
 
 # $sha is provided by jenkins
 BUILDER_TAG?=$(or $(sha),$(SERVICE_NAME)-builder)
-IMAGE_TAG=$(SERVICE_NAME)-s3
+IMAGE_TAG=$(SERVICE_NAME)-img
 
 default: ci
 
