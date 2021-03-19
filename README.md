@@ -13,6 +13,24 @@ export ARTIFACTORY_USER=<Artifactory username>
 export ARTIFACTORY_API_TOKEN=<Artifactory API key>
 ```
 
+You also need another two environment variables `NPM_EMAIL` and `NPM_AUTH`.
+Run the following command to get the values for the two variables:
+```
+curl -s -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.adobe.com/artifactory/api/npm/auth
+```
+The output will be something like below:
+```
+$ curl -s -u$ARTIFACTORY_USER:$ARTIFACTORY_API_TOKEN https://artifactory.corp.adobe.com/artifactory/api/npm/auth
+_auth = <auth_key>
+always-auth = true
+email = <your_email>
+```
+Export the following variables in your `.profile` or `.bash_profile`:
+```
+export NPM_EMAIL=<your_email>
+export NPM_AUTH=<auth_key>
+```
+
 ## Clone the project and create a new repository
 First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name. The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of the original services which might already be using dashes. Throughout this document we will refer to this name as `<servicename>`.
 ```
