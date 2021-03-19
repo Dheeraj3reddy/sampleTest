@@ -106,21 +106,21 @@ Version: webpack 2.2.1
 Time: 928ms
 
 ... (lines omitted)
-Project is running at https://secure.local.echocdn.com:9000/
+Project is running at https://secure.local.adobesigncdn.com:9000/
 webpack output is served from /
 Content not from webpack is served from /Users/emanfu/dev/cdnexample/dist
 
 
 ```
 
-Then point any browser to https://secure.local.echocdn.com:9000/ to see the web page. Please note that if you have echosign local server configured in your machine, you probably already have the host name entry secure.local.echocdn.com in your `/etc/hosts` file. If your browser complains that the host's DNS address cannot be resolved, you will have to add the following line into your `/etc/hosts` file:
+Then point any browser to https://secure.local.adobesigncdn.com:9000/ to see the web page. Please note that if you have echosign local server configured in your machine, you probably already have the host name entry secure.local.adobesigncdn.com in your `/etc/hosts` file. If your browser complains that the host's DNS address cannot be resolved, you will have to add the following line into your `/etc/hosts` file:
 ```
-127.0.0.1 secure.local.echocdn.com
+127.0.0.1 secure.local.adobesigncdn.com
 ```
 
 
 ## Working with Paths
-All paths used in your source files must be relative. How your project is deployed might change over time (example `https://static.echocdn.com/<yourservice>` vs. `https://<youservice>.echocdn.com`) and this means you can never assume the positioning of your content with respect to the root.
+All paths used in your source files must be relative. How your project is deployed might change over time (example `https://static.adobesigncdn.com/<yourservice>` vs. `https://<youservice>.adobesigncdn.com`) and this means you can never assume the positioning of your content with respect to the root.
 
 As mentioned earlier in this document, assets under `dist/__VERSION` are deployed with a new unique folder name on each deployment. You are free to use the string `__VERSION__` as a placeholder for this unique name in your source files. During deployment, this string is replaced in all source files (with extensions `*.htm`, `*.html`, `*.css`, `*.js`, `*.json` with the correct folder name.
 
