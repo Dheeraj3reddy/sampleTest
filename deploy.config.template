@@ -39,13 +39,3 @@
 # it is recommended that developers use another mechanism for expiring content.
 # For example, include hashes (based on file content) in file names.
 # SECOND_LEVEL_FOLDERS=<folder1>,<folder2>,...
-
-
-# Explicit file compression
-# Our CDN solution automatically gzips content and serves it with content-encoding=gzip
-# if the browser says that it can handle gzip content. However, this automatic compression
-# does not happen for all file types. For cases where automated compression isn't available
-# for a particular type, this property can be used to have the pipeline pre-compress
-# content and deploy it such that it is ALWAYS served as content-encoding=gzip.
-# List file extensions as a comma-separated list.
-# EXPLICIT_GZIP_EXTENSIONS=<file_ext1>,<file_ext2>,...
