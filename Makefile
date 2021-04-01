@@ -1,10 +1,8 @@
-ifndef SERVICE_NAME
-$(error SERVICE_NAME is not set)
-endif
+SERVICE_NAME=cdnexample
 
 # $sha is provided by jenkins
 BUILDER_TAG?=$(or $(sha),$(SERVICE_NAME)-builder)
-IMAGE_TAG=$(SERVICE_NAME)-s3
+IMAGE_TAG=$(SERVICE_NAME)-img
 
 default: ci
 
