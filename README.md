@@ -45,9 +45,10 @@ Resolving deltas: 100% (201/201), done.
 ```
 
 ## Update service name in the Makefile
-Find `Makefile` in the root folder of the check-out content and replace
-`SERVICE_NAME=cdnexample` with `SERVICE_NAME=<servicename>`
-`(e.g. SERVICE_NAME=xyz-cdn)`
+Find `Makefile` in the root folder of the check-out content and update
+`SERVICE_NAME=cdnexample` with your service name:  
+i.e. `SERVICE_NAME=<servicename>`  
+e.g. `SERVICE_NAME=xyz-cdn`
 
 ## Initialize git and execute first push
 ```
