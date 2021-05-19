@@ -38,12 +38,6 @@ npm install
 npm run build
 npm run test
 
-# Report dependencies to TESSA
-if [ -n "$TESSA2_API_KEY" ]; then
-    echo "TESSA2_API_KEY found. Reporting dependencies to TESSA"
-    npm run report-dependencies-tessa
-fi
-
 # Publish an NPM package if $PUSH_ARTIFACTS is non-empty and the "dist-pub"
 # folder exists.
 if [[ -n "$PUSH_ARTIFACTS" && -d dist-pub ]]; then
@@ -90,4 +84,10 @@ EOF
     else
         echo "The package $package_name@$package_version is already in the artifactory. Skipping publishing"
     fi
+fi
+
+# Report dependencies to TESSA
+if [ -n "$TESSA2_API_KEY" ]; then
+    echo "TESSA2_API_KEY found. Reporting dependencies to TESSA"
+    npm run report-dependencies-tessa
 fi
