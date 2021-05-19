@@ -32,26 +32,39 @@ export NPM_AUTH=<auth_key>
 ```
 
 ## Clone the project and create a new repository
-First, decide on your service name. If your CDN project is paired with an existing microservice, use the same name. The name should be in the form `servicename`, without camel case, underscores or dashes, with the exception of some of the original services which might already be using dashes. Throughout this document we will refer to this name as `<servicename>`.
+First, decide on your service name. The name should be in the form `<something>-cdn` where `<something>` is without
+camel case, underscores, or dashes. If your CDN poject is paired with an existing microservice `<xyz>`, use `<xyz>-cdn`.
+Throughout this document we will refer to your name choice as `<servicename>`.
 ```
-$ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>-cdn
-Cloning into '<servicename>-cdn'...
+$ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>
+Cloning into '<servicename>'...
 remote: Counting objects: 435, done.
 remote: Total 435 (delta 0), reused 0 (delta 0), pack-reused 434
 Receiving objects: 100% (435/435), 56.03 KiB | 0 bytes/s, done.
 Resolving deltas: 100% (201/201), done.
-$ cd <servicename>-cdn/
-$ rm -rf .git
-$ git init
-Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>-cdn/.git/
 ```
 
-Now push your project to a new git repo with the name `<servicename>-cdn`.
+## Update service name in the Makefile
+Find `Makefile` in the root folder of the check-out content and replace
+`SERVICE_NAME=cdnexample` with `SERVICE_NAME=<servicename>`
+`(e.g. SERVICE_NAME=xyz-cdn)`
+
+## Initialize git and execute first push
+```
+$ cd <servicename>/
+$ rm -rf .git    # Remove the cdnexample git history
+$ git init       # Initialize as a new project
+Initialized empty Git repository in /Users/shickey/Workspaces/<servicename>/.git/
+$ git add .
+$ git commit -m "Initial commit"
+```
+
+Now push your project to a new git repo with the name `<servicename>`.
 
 ## Build the project
 1. Install dependencies:
     ```
-    $ cd <servicename>-cdn
+    $ cd <servicename>
     $ npm install
     ```
 
@@ -94,7 +107,7 @@ Building the project creates a `dist` directory containing all of the assets in 
 You can control what files go where via `Gruntfile.js`
 
 ## Preview Website Locally
-Under `<servicename>-cdn` folder:
+Under `<servicename>` folder:
 ```
 $ npm run start
 
