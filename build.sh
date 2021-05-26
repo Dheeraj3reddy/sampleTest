@@ -91,3 +91,13 @@ if [ -n "$TESSA2_API_KEY" ]; then
     echo "TESSA2_API_KEY found. Reporting dependencies to TESSA"
     npm run report-dependencies-tessa
 fi
+
+# SonarQube analysis
+if [ -n "$SONAR_TOKEN" ]; then
+    if [ -z "$sha" ]; then
+        echo sha is required for SonarQube analysis
+        exit 1
+    fi
+
+    ############# TODO - Add SonarQube analysis here #############
+fi
