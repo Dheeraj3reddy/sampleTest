@@ -20,19 +20,6 @@ login:
 # provided by Jenkins.
 ci: IMAGE_TAG := $(if $(sha),$(IMAGE_TAG)-ci-$(sha),$(IMAGE_TAG))
 ci: build
-ifeq ($(RUN_COVERAGE),true)
-	docker run \
-	-v `pwd`:/build:z \
-	-e COVERALLS_SERVICE_NAME \
-	-e COVERALLS_REPO_TOKEN \
-	-e COVERALLS_ENDPOINT \
-	-e CI_PULL_REQUEST=$(ghprbPullId) \
-	-e ARTIFACTORY_API_TOKEN \
-	-e ARTIFACTORY_USER \
-	$(BUILDER_TAG) /build/run-coverage.sh
-else
-	echo "No test coverage to run"
-endif
 
 # This target is called by the Jenkins "build" job.
 build: login
@@ -49,6 +36,13 @@ build: login
 	-e ARTIFACTORY_API_TOKEN \
 	-e ARTIFACTORY_USER \
 	-e TESSA2_API_KEY \
+	-e SONAR_TOKEN \
+	-e SONAR_ANALYSIS_TYPE \
+	-e repo \
+	-e sha \
+	-e branch \
+	-e base_branch \
+	-e pr_numbers \
 	$(BUILDER_TAG)
 	# Package the built content it into a deployer image.
 	# This deployer image knows how to push the artifacts to S3 when run.
@@ -87,6 +81,13 @@ run-build-image-interactively:
 	-e ARTIFACTORY_API_TOKEN \
 	-e ARTIFACTORY_USER \
 	-e TESSA2_API_KEY \
+	-e SONAR_TOKEN \
+	-e SONAR_ANALYSIS_TYPE \
+	-e repo \
+	-e sha \
+	-e branch \
+	-e base_branch \
+	-e pr_numbers \
 	-i -t $(BUILDER_TAG) /bin/bash
 
 run-deployer-image-interactively:
