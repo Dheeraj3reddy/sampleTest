@@ -11,7 +11,7 @@ login:
 	@docker login -u $(ARTIFACTORY_USER) -p $(ARTIFACTORY_API_TOKEN) docker-asr-release.dr.corp.adobe.com
 
 # This target is called by the Jenkins "ci" job. It builds and runs the builder image,
-# which should build the project and run unit tests, and optionally, code coverage.
+# which should build the project and run unit tests, Tessa, and code coverage.
 #
 # Ethos and Document Cloud build infrastructure requires that images be tagged in a standard way (see IMAGE_TAG above)
 # so that the infrastructure can find them after building. Unlike Ethos, however, Document Cloud currently executes
