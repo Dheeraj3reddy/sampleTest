@@ -84,6 +84,8 @@ EOF
     else
         echo "The package $package_name@$package_version is already in the artifactory. Skipping publishing"
     fi
+
+    cd ..
 fi
 
 # Report dependencies to TESSA
