@@ -9,7 +9,7 @@ var jQuery = require('jquery'),
     require('../images/Bethoven.png'),
     require('../images/obama-signature.jpg')],
   readMeUrl = require('../README.md'),
-  exampleLib = require('@cdnexample/cdnexamplelib');
+  exampleLib = require('npmlibexample');
 
 function sayHello() {
   // here, we assume that UiStrings already initialized with proper language via call into UiStrings.loadTranslations()
