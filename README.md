@@ -34,7 +34,9 @@ export NPM_AUTH=<auth_key>
 ## Clone the project and create a new repository
 First, decide on your service name. The name should be in the form `<something>-cdn` where `<something>` is without
 camel case, underscores, or dashes. If your CDN poject is paired with an existing microservice `<xyz>`, use `<xyz>-cdn`.
-Throughout this document we will refer to your name choice as `<servicename>`.
+Throughout this document we will refer to your name choice as `<servicename>`. You'll use this in your Makefile, to name
+the Git repository, and when you onboard to the deployment pipeline. Using the same name in package.json also makes it
+easy to tie the content back to its repository.
 ```
 $ git clone git@git.corp.adobe.com:EchoSign/cdnexample.git <servicename>
 Cloning into '<servicename>'...
