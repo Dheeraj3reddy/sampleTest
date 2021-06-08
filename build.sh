@@ -2,6 +2,7 @@
 # -e to exit on first error.
 
 # This script is responsible for building the project's static content.
+# It is also responsible for updating Tessa and running code coverage (i.e. SonarQube).
 #
 # Developers are free to alter the build process, even significantly, as long
 # as they ensure:
