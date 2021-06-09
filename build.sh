@@ -97,8 +97,10 @@ fi
 
 # SonarQube analysis
 if [ -n "$SONAR_TOKEN" ]; then
+    echo "SONAR_TOKEN found. Running SonarQube analysis with SONAR_ANALYSIS_TYPE=$SONAR_ANALYSIS_TYPE"
+
     if [ -z "$sha" ]; then
-        echo sha is required for SonarQube analysis
+        echo "Error: sha is required for SonarQube analysis"
         exit 1
     fi
 
