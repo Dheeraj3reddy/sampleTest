@@ -1,6 +1,6 @@
 SERVICE_NAME=cdnexample
 
-# $sha is provided by jenkins
+# $sha is provided by the build system
 BUILDER_TAG?=$(or $(sha),$(SERVICE_NAME)-builder)
 IMAGE_TAG=$(SERVICE_NAME)-img
 
@@ -10,22 +10,21 @@ login:
 	@echo docker login -u ARTIFACTORY_USER -p ARTIFACTORY_API_TOKEN docker-asr-release.dr.corp.adobe.com
 	@docker login -u $(ARTIFACTORY_USER) -p $(ARTIFACTORY_API_TOKEN) docker-asr-release.dr.corp.adobe.com
 
-# This target is called by the Jenkins "ci" job. It builds and runs the builder image,
-# which should build the project and run unit tests, Tessa, and code coverage.
+# This target is called by the build system's "ci" job.
 #
 # Ethos and Document Cloud build infrastructure requires that images be tagged in a standard way (see IMAGE_TAG above)
-# so that the infrastructure can find them after building. Unlike Ethos, however, Document Cloud currently executes
+# so that the infrastructure can find them after building. Unlike Ethos, however, Document Cloud executes some of
 # our ci jobs on the same Jenkins servers as our build jobs. In order to avoid accidentally publishing the wrong image
 # (i.e. when a ci job and a build job run at the same time) we override the image tag for ci jobs by adding a git sha
 # provided by Jenkins.
 ci: IMAGE_TAG := $(if $(sha),$(IMAGE_TAG)-ci-$(sha),$(IMAGE_TAG))
 ci: build
 
-# This target is called by the Jenkins "build" job.
+# This target is called by the build system's "build" job.
 build: login
 	# First, build and run the builder image.
 	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
-	# Run the builder image to do the actual code build, run unit tests,
+	# Run the builder image to do the actual code build, run unit tests, update Tessa, run code coverage,
 	# and prepare the artifacts for deployment (move them into the hash
 	# folder, prepare the manifest, etc.). The results are placed in the current
 	# directory of the local file system.
@@ -48,7 +47,7 @@ build: login
 	# This deployer image knows how to push the artifacts to S3 when run.
 	docker build --pull -t $(IMAGE_TAG) .
 
-# This target is called by the Jenkins "ui-test" job.
+# This target is called by the build system's "ui-test" job.
 # Runs the uitest image to launch the UI test.
 run-uitest: login
 	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
@@ -59,7 +58,7 @@ run-uitest: login
 	-e ARTIFACTORY_USER \
 	$(BUILDER_TAG) /build/run-uitest.sh
 
-# This target is called by the Jenkins "cdn-postmerge" job.
+# This target is called by the build system's "cdn-postmerge" job.
 # Runs the build image to launch the post-merge script.
 run-postmerge-hook: login
 	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
