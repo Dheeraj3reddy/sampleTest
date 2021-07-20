@@ -2,7 +2,7 @@
 # -e to exit on first error.
 
 # This script is responsible for building the project's static content.
-# It is also responsible for updating Tessa and running code coverage (i.e. SonarQube).
+# It is also responsible for running code coverage (i.e. SonarQube) and updating Tessa.
 #
 # Developers are free to alter the build process, even significantly, as long
 # as they ensure:
@@ -38,6 +38,18 @@ rm -rf dist dist-pub
 npm install
 npm run build
 npm run test
+
+# SonarQube analysis
+if [ -n "$SONAR_TOKEN" ]; then
+    echo "SONAR_TOKEN found. Running SonarQube analysis with SONAR_ANALYSIS_TYPE=$SONAR_ANALYSIS_TYPE"
+
+    if [ -z "$sha" ]; then
+        echo "Error: sha is required for SonarQube analysis"
+        exit 1
+    fi
+
+    ############# TODO - Add SonarQube analysis here #############
+fi
 
 # Publish an NPM package if $PUSH_ARTIFACTS is non-empty and the "dist-pub"
 # folder exists.
@@ -93,16 +105,4 @@ fi
 if [ -n "$TESSA2_API_KEY" ]; then
     echo "TESSA2_API_KEY found. Reporting dependencies to TESSA"
     npm run report-dependencies-tessa
-fi
-
-# SonarQube analysis
-if [ -n "$SONAR_TOKEN" ]; then
-    echo "SONAR_TOKEN found. Running SonarQube analysis with SONAR_ANALYSIS_TYPE=$SONAR_ANALYSIS_TYPE"
-
-    if [ -z "$sha" ]; then
-        echo "Error: sha is required for SonarQube analysis"
-        exit 1
-    fi
-
-    ############# TODO - Add SonarQube analysis here #############
 fi

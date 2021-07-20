@@ -24,7 +24,7 @@ ci: build
 build: login
 	# First, build and run the builder image.
 	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
-	# Run the builder image to do the actual code build, run unit tests, update Tessa, run code coverage,
+	# Run the builder image to do the actual code build, run unit tests, run code coverage, update Tessa,
 	# and prepare the artifacts for deployment (move them into the hash
 	# folder, prepare the manifest, etc.). The results are placed in the current
 	# directory of the local file system.
