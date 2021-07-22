@@ -48,7 +48,7 @@ build: login
 	docker build --pull -t $(IMAGE_TAG) .
 
 # This target is called by the build system's "ui-test" job.
-# Runs the uitest image to launch the UI test.
+# Runs the build image to launch the UI test script.
 run-uitest: login
 	docker build --pull -t $(BUILDER_TAG) -f Dockerfile.build.mt .
 	docker run \
