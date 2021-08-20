@@ -48,7 +48,7 @@ if [ -n "$SONAR_TOKEN" ]; then
         exit 1
     fi
 
-    ############# TODO - Add SonarQube analysis here #############
+    npm run test:sonar
 fi
 
 # Publish an NPM package if $PUSH_ARTIFACTS is non-empty and the "dist-pub"
