@@ -52,6 +52,17 @@ module.exports = function (grunt) {
       unit: {
         configFile: './karma.conf.js'
       }
+    },
+
+    run: {
+      npm_test_jest: {
+        cmd: 'npm',
+        args: [
+          'run',
+          'test',
+          '--coverage'
+        ]
+      }
     }
   });
 
@@ -82,6 +93,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('test', [
-    'karma:unit'
+    'run:npm_test_jest'
   ]);
 };
