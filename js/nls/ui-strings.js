@@ -10,8 +10,6 @@
 /* global require, module */
 
 var Promise = require('es6-promise').Promise;
-// require('bundle-loader!./root/ui-strings.json');
-
 
 // Module level variable that stores translations (as key/value object)
 var loadedTranslations = null;
@@ -25,11 +23,19 @@ var loadedTranslations = null;
 function loadTranslations(locale) {
   var loc = (locale === 'en_US') ? 'root' : locale;
   return new Promise(function (resolve) {
-    // require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json')(function (jsonBundle) {
-    require('bundle-loader!./'+ loc +'/ui-strings.json')(function (jsonBundle) {
+    var bundle = require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json');
+    var resolveBundle = function (jsonBundle) {
       loadedTranslations = jsonBundle;
       resolve(jsonBundle);
-    });
+    };
+
+    if (typeof bundle === 'function') {
+      bundle(function (jsonBundle) {
+        resolveBundle(jsonBundle);
+      });
+    } else {
+      resolveBundle(bundle);
+    }
   });
 }
 
