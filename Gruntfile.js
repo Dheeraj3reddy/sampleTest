@@ -89,6 +89,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'run:npm_test_jest'
   ]);
+
   grunt.registerTask('sonar', function () {
     console.log('[Grunt:sonar] Running task...');
 
@@ -121,20 +122,20 @@ module.exports = function (grunt) {
       'sonar.coverage.exclusions': 'src/**/*.spec.js'
     };
 
-    if (process.env.SONAR_ANALYSIS_TYPE === 'pr') {
-      sonarProperties = Object.assign({}, sonarProperties, {
-        // #################################################
-        // # Github Configuration
-        // #################################################
-        'sonar.github.endpoint': 'https://git.corp.adobe.com/api/v3',
-        'sonar.pullrequest.provider': 'github',
-        'sonar.pullrequest.branch': process.env.branch,
-        'sonar.pullrequest.key': process.env.pr_numbers,
-        'sonar.pullrequest.base': process.env.base_branch,
-        'sonar.pullrequest.github.repository': process.env.repo,
-        'sonar.scm.revision': process.env.sha
-      });
-    }
+    // if (process.env.SONAR_ANALYSIS_TYPE === 'pr') {
+    //   sonarProperties = Object.assign({}, sonarProperties, {
+    //     // #################################################
+    //     // # Github Configuration
+    //     // #################################################
+    //     'sonar.github.endpoint': 'https://git.corp.adobe.com/api/v3',
+    //     'sonar.pullrequest.provider': 'github',
+    //     'sonar.pullrequest.branch': process.env.branch,
+    //     'sonar.pullrequest.key': process.env.pr_numbers,
+    //     'sonar.pullrequest.base': process.env.base_branch,
+    //     'sonar.pullrequest.github.repository': process.env.repo,
+    //     'sonar.scm.revision': process.env.sha
+    //   });
+    // }
 
     console.log('[Grunt:sonar] Calling SonarQube Scanner');
     sonarqubeScanner({
