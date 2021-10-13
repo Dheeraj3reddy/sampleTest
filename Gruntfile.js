@@ -48,12 +48,6 @@ module.exports = function (grunt) {
       }
     },
 
-    karma: {
-      unit: {
-        configFile: './karma.conf.js'
-      }
-    },
-
     run: {
       npm_test_jest: {
         cmd: 'npm',
