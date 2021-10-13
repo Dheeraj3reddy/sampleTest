@@ -118,7 +118,7 @@ module.exports = function (grunt) {
       // #################################################
       'sonar.language': 'javascript',
       'sonar.sources': 'js',
-      'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+      'sonar.javascript.lcov.reportPaths': 'test_coverage/lcov.info',
       'sonar.coverage.exclusions': 'src/**/*.spec.js'
     };
 
