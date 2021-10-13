@@ -10,7 +10,8 @@
     "start": "webpack-dev-server",
     "watch": "webpack --progress --watch",
     "test": "jest",
-    "coverage": "jest --collect-coverage",
+    "coverage": "jest --coverage",
+    "test:sonar": "grunt sonar",
     "postinstall": "echo 'nothing to do for postinstall'",
     "report-dependencies-tessa": "bash ./tessa-npm-plugin.sh update",
     "test-dependencies-tessa": "bash ./tessa-npm-plugin.sh check --errorOnNewVulnerability"
@@ -41,6 +42,7 @@
     "jest-cli": "^27.2.1",
     "load-grunt-tasks": "~3.5.2",
     "phantomjs-prebuilt": "~2.1.14",
+    "sonarqube-scanner": "^2.8.1",
     "webpack": "~2.2.1",
     "webpack-dev-server": "~2.4.2"
   },
