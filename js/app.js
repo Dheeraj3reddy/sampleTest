@@ -35,4 +35,8 @@ function startApp(lang) {
   });
 }
 
+// The export is only needed for testing purpose.
+module.exports = {
+  startApp: startApp
+};
 
