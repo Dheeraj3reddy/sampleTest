@@ -1,6 +1,6 @@
 {
   "name": "cdnexample",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "example project for CI/CD pipeline for static assets",
   "main": "index.js",
   "scripts": {
@@ -45,14 +45,13 @@
     "load-grunt-tasks": "~3.5.2",
     "mocha": "~3.2.0",
     "phantomjs-prebuilt": "~2.1.14",
-    "underscore": "~1.8.3",
     "webpack": "~2.2.1",
     "webpack-dev-server": "~2.4.2"
   },
   "dependencies": {
-    "npmlibexample": "0.0.1",
+    "npmlibexample": "1.0.0",
     "es6-promise": "~4.1.0",
-    "jquery": "~3.1.1",
-    "underscore": "~1.8.3"
+    "jquery": "~3.5.1",
+    "underscore": "~1.12.1"
   }
 }
