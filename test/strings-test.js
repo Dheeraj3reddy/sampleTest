@@ -13,7 +13,7 @@ describe('Localized String Loader', () => {
       });
   });
 
-  it('loads fr_FR strings', () => {
+  test('loads fr_FR strings', () => {
     return UiStrings.loadTranslations('fr_FR')
       .then(function() {
         expect(UiStrings.getTranslatedString('helloWorldMsg')).toBe('Bonjour tout le monde, actifs statiques!');

@@ -10,7 +10,6 @@ describe('test app', () => {
     test('loads translations', () => {
         const spy = jest.spyOn(UiStrings, 'loadTranslations');
         app.startApp('en_US');
-        expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledWith('en_US');
     });
 });

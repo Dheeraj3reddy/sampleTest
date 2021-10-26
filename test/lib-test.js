@@ -15,12 +15,12 @@ describe('App Library Functions', () => {
     return UiStrings.loadTranslations('en_US');
   });
 
-  it('sets hello-world message', () => {
+  test('sets hello-world message', () => {
     lib.sayHello();
     expect(jQuery('.title').html()).toBe(UiStrings.getTranslatedString('helloWorldMsg'));
   });
 
-  it('shows image info', () => {
+  test('shows image info', () => {
     lib.showImageInfo();
 
     // number of images should be 2
