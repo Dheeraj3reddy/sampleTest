@@ -1,40 +1,39 @@
 /**
  * Created by emanfu on 4/1/17.
  */
-/* eslint-env mocha */
 /* global require, describe */
 
-var expect = require('chai').expect,
-  UiStrings = require('../js/nls/ui-strings'),
-  lib = require('../js/lib'),
-  jQuery = require('jquery'),
-  _ = require('underscore');
+const UiStrings = require('../js/nls/ui-strings');
+const lib = require('../js/lib');
+const jQuery = require('jquery');
+const _ = require('underscore');
+const testHtml = require('../index.html');
 
-describe('App Library Functions', function() {
-  before(function () {
+describe('App Library Functions', () => {
+  beforeAll(() => {
+    jQuery(document.body).html(testHtml);
     return UiStrings.loadTranslations('en_US');
   });
 
-  it('sets hello-world message', function() {
+  test('sets hello-world message', () => {
     lib.sayHello();
-    expect(jQuery('.title').html()).to.equal(UiStrings.getTranslatedString('helloWorldMsg'));
+    expect(jQuery('.title').html()).toBe(UiStrings.getTranslatedString('helloWorldMsg'));
   });
 
-  it('shows image info', function () {
-    var numImages, listItems, imageElements;
+  test('shows image info', () => {
     lib.showImageInfo();
 
     // number of images should be 2
-    numImages = jQuery('.image-info > div > span').html();
-    expect(numImages).to.equal('2');
+    const numImages = jQuery('.image-info > div > span').html();
+    expect(numImages).toBe('2');
 
     // we should have 2 list items whose values matching the images' src attributes.
-    listItems = jQuery('.image-info > ul li');
-    imageElements = jQuery('.sample-image img');
-    expect(listItems.length).to.equal(imageElements.length);
+    const listItems = jQuery('.image-info > ul li');
+    const imageElements = jQuery('.sample-image img');
+    expect(listItems.length).toBe(imageElements.length);
     _.each(listItems, function (item, index) {
       var imageLink = jQuery(imageElements[index]).attr('src');
-      expect(item.innerHTML).to.equal(imageLink);
+      expect(imageLink).toContain(item.innerHTML);
     });
   })
 });

@@ -46,12 +46,6 @@ module.exports = function (grunt) {
       'build-dev': {
         devtool: 'inline-source-map'
       }
-    },
-
-    karma: {
-      unit: {
-        configFile: './karma.conf.js'
-      }
     }
   });
 
@@ -81,7 +75,61 @@ module.exports = function (grunt) {
     'webpack:build-dev'
   ]);
 
-  grunt.registerTask('test', [
-    'karma:unit'
-  ]);
+  grunt.registerTask('sonar', function () {
+    console.log('[Grunt:sonar] Running task...');
+
+    const done = this.async();
+    const sonarqubeScanner = require('sonarqube-scanner'),
+        packageName = require('./package.json').name;
+
+    if (process.env.SONAR_TOKEN) {
+      console.log('[Grunt:sonar] process.env.SONAR_TOKEN is defined');
+    }
+    console.log('[Grunt:sonar] process.env.SONAR_ANALYSIS_TYPE=' + process.env.SONAR_ANALYSIS_TYPE);
+
+    let sonarProperties = {
+      // #################################################
+      // # General Configuration
+      // #################################################
+      'sonar.projectKey': `microservice:${packageName}`,
+      'sonar.projectName': `Microservice - Adobe Sign - ${packageName}`,
+
+      'sonar.sourceEncoding': 'UTF-8',
+      'sonar.login': process.env.SONAR_TOKEN,
+      'sonar.host.url': 'https://adobesign.cq.corp.adobe.com',
+
+      // #################################################
+      // # Javascript Configuration
+      // #################################################
+      'sonar.language': 'javascript',
+      'sonar.sources': 'js',
+      'sonar.javascript.lcov.reportPaths': 'test_coverage/lcov.info',
+      'sonar.coverage.exclusions': 'src/**/*.spec.js'
+    };
+
+    if (process.env.SONAR_ANALYSIS_TYPE === 'pr') {
+      sonarProperties = Object.assign({}, sonarProperties, {
+        // #################################################
+        // # Github Configuration
+        // #################################################
+        'sonar.github.endpoint': 'https://git.corp.adobe.com/api/v3',
+        'sonar.pullrequest.provider': 'github',
+        'sonar.pullrequest.branch': process.env.branch,
+        'sonar.pullrequest.key': process.env.pr_numbers,
+        'sonar.pullrequest.base': process.env.base_branch,
+        'sonar.pullrequest.github.repository': process.env.repo,
+        'sonar.scm.revision': process.env.sha
+      });
+    }
+
+    console.log('[Grunt:sonar] Calling SonarQube Scanner');
+    sonarqubeScanner({
+     serverUrl: 'https://adobesign.cq.corp.adobe.com',
+     token: process.env.SONAR_TOKEN,
+     options: sonarProperties
+   }, () => {
+      console.log('[Grunt:sonar] Done with SonarQube Scanner');
+      done(true);
+    });
+  });
 };

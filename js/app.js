@@ -1,7 +1,7 @@
 /**
  * Created by emanfu on 2/16/17.
  */
-/* global require, __webpack_public_path__ */
+/* global require, module, __webpack_public_path__ */
 
 // this is for supressing the eslint errors caused by setting __webpack_public_path__
 /* eslint no-unused-vars: 0, no-global-assign: 0 */
@@ -35,4 +35,7 @@ function startApp(lang) {
   });
 }
 
-
+// The export is only needed for testing purpose.
+module.exports = {
+  startApp: startApp
+};
