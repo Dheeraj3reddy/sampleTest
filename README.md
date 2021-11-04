@@ -235,13 +235,13 @@ Localization is handled by the code and json bundles located under js/nls folder
     __webpack_public_path__ = '../';
   ```
  5. On-board your project with localization team:
-    *   contact Rob Jaworski <jaworski@adobe.com> and John Nguyen <jonguyen@adobe.com> and provide the following info
+    *   contact Margaret Wong <ywong@adobe.com> and Yogita Raturi <yraturi@adobe.com> and provide the following info
     *   What git/branch needs to be monitoring?  - Most likely you want to use Master branch if following CI/CD process
     *   How changes should be pushed back (direct checkin or a pull request)?  - Most likely you want to use a pull request method.
-    *   You also will need to grant write access of your github to "walf" utility account (and to Jon Nguyen)
+    *   You also will need to grant write access of your github to "walf" utility account (and to Margaret Wong)
     
- Note that usual timeline for localization to come back is about week (They usually send out the strings for translation every Friday's night and get the translation back by the following Wednesday's morning).
- 
+Note that usual timeline for localization to come back is about week 
+They usually send out the strings for translation every Tue night and Thursday night. The translation for Tuesday comes back on Thu morning the translation for Thursday comes back on the following Tuesday morning)
  
   This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
   __NOTE:__ Due to a bug in `karma-webpack`, The lazy loading of string bundles is not working in Karma when using `karma-webpack` greater than `2.0.3`. Currently we have to exactly pin to `karma-webpack@2.0.3` to get the unit test work.
