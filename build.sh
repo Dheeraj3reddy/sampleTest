@@ -39,8 +39,11 @@ npm install
 npm run build
 npm run coverage
 
-# SonarQube analysis
+# If SONAR_TOKEN is provided, run SonarQube analysis
 if [ -n "$SONAR_TOKEN" ]; then
+
+# To run SonarQube only on build jobs (not PR), comment out the line above and uncomment the following line
+# if [ -n "$SONAR_TOKEN" ] && [ "$SONAR_ANALYSIS_TYPE" = "build" ];
     echo "SONAR_TOKEN found. Running SonarQube analysis with SONAR_ANALYSIS_TYPE=$SONAR_ANALYSIS_TYPE"
 
     if [ -z "$sha" ]; then
