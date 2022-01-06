@@ -12,7 +12,7 @@ Your username and API key must be exported via your `.profile` or `.bash_profile
 export ARTIFACTORY_USER=<Artifactory username>
 export ARTIFACTORY_API_TOKEN=<Artifactory API key>
 ```
-
+e
 You also need another two environment variables `NPM_EMAIL` and `NPM_AUTH`.
 Run the following command to get the values for the two variables:
 ```
