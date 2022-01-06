@@ -25,7 +25,7 @@ _auth = <auth_key>
 always-auth = true
 email = <your_email>
 ```
-Export the following variables in your `.profile` or `.bash_profile`:
+Export the following variables in your `.profile` or `.bash_profile`:.
 ```
 export NPM_EMAIL=<your_email>
 export NPM_AUTH=<auth_key>
