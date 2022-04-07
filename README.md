@@ -235,7 +235,7 @@ Localization is handled by the code and json bundles located under js/nls folder
     __webpack_public_path__ = '../';
   ```
  5. On-board your project with localization team:
-    * Please follow the steps listed in the [Localization Wiki](https://wiki.corp.adobe.com/display/localization/Localizing+Resource+Files)
+    * Please follow the steps listed in the [Localization Wiki](https://wiki.corp.adobe.com/display/localization/Localizing+Resource+Files#LocalizingResourceFiles-AddingResourceFiles)
     * Users for any github repo can be added through [iamcorp](https://iam.corp.adobe.com/#/accessrequests) - "walf" utility account needs to be added manually.
     * Reference ticket - https://jira.corp.adobe.com/browse/DCL-10211
     * Old Process:
