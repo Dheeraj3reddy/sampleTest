@@ -236,7 +236,7 @@ Localization is handled by the code and json bundles located under js/nls folder
   ```
  5. On-board your project with localization team:
     * Please follow the steps listed in the [Localization Wiki](https://wiki.corp.adobe.com/display/localization/Localizing+Resource+Files#LocalizingResourceFiles-AddingResourceFiles)
-    * Users for any github repo can be added through [iamcorp](https://iam.corp.adobe.com/#/accessrequests) - "walf" utility account needs to be added manually.
+    * Users for any github repo can be added through [iamcorp](https://iam.corp.adobe.com/#/accessrequests) - "walf" utility account needs to be added manually by SRE.
     * Reference ticket - https://jira.corp.adobe.com/browse/DCL-10211
     * Old Process:
         *   contact Margaret Wong <ywong@adobe.com> and Yogita Raturi <yraturi@adobe.com> and provide the following info
@@ -244,8 +244,8 @@ Localization is handled by the code and json bundles located under js/nls folder
         *   How changes should be pushed back (direct checkin or a pull request)?  - Most likely you want to use a pull request method.
         *   You also will need to grant write access of your github to "walf" utility account (and to Margaret Wong)
 
-Note that usual timeline for localization to come back is about week
-They usually send out the strings for translation every Tuesday night and Thursday night. The translation for Tuesday comes back on Thursday morning and the translation for Thursday comes back on the following Tuesday morning)
+Note that usual timeline for localization to come back is about one week.
+They usually send out the strings for translation every Tuesday night and Thursday night. The translation for Tuesday comes back on Thursday morning and the translation for Thursday comes back on the following Tuesday morning).
 
   This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
   __NOTE:__ Due to a bug in `karma-webpack`, The lazy loading of string bundles is not working in Karma when using `karma-webpack` greater than `2.0.3`. Currently we have to exactly pin to `karma-webpack@2.0.3` to get the unit test work.
