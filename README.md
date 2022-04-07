@@ -245,7 +245,7 @@ Localization is handled by the code and json bundles located under js/nls folder
         *   You also will need to grant write access of your github to "walf" utility account (and to Margaret Wong)
 
 Note that usual timeline for localization to come back is about one week.
-They usually send out the strings for translation every Tuesday night and Thursday night. The translation for Tuesday comes back on Thursday morning and the translation for Thursday comes back on the following Tuesday morning).
+They usually send out the strings for translation every Tuesday night and Thursday night. The translation for Tuesday comes back on Thursday morning and the translation for Thursday comes back on the following Tuesday morning.
 
   This project is based on the localization solution stated in the following Wiki page, but not that the Wiki page uses ES5: [Localization for UI plugins](https://wiki.corp.adobe.com/display/ES/Localization+for+UI+plugins).
   __NOTE:__ Due to a bug in `karma-webpack`, The lazy loading of string bundles is not working in Karma when using `karma-webpack` greater than `2.0.3`. Currently we have to exactly pin to `karma-webpack@2.0.3` to get the unit test work.
