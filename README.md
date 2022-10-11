@@ -110,7 +110,7 @@ Building the project creates a `dist` directory containing all of the assets in 
 You can control what files go where via `Gruntfile.js`
 
 ## Preview Website Locally
-Under `<servicename>` folder:
+Under `<servicename>` folder::
 ```
 $ npm run start
 
