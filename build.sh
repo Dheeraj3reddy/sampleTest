@@ -28,6 +28,7 @@ else
     # If missing $ARTIFACTORY_USER, try the user-level .npmrc file.
     auth=$(<~/.npmrc)
 fi
+
 [[ "$auth" =~ email\ *=\ *([[:graph:]]*) ]]; export NPM_EMAIL="${BASH_REMATCH[1]}"
 [[ "$auth" =~ _auth\ *=\ *([[:graph:]]*) ]]; export NPM_AUTH="${BASH_REMATCH[1]}"
 
@@ -68,7 +69,7 @@ if [[ -n "$PUSH_ARTIFACTS" && -d dist-pub ]]; then
     PUBLISH_REGISTRY=https://artifactory.corp.adobe.com/artifactory/api/npm/npm-adobesign-release-local/
     cat > .npmrc << EOF
 registry=$PUBLISH_REGISTRY
-_auth=$NPM_AUTH
+//artifactory.corp.adobe.com/artifactory/api/npm/npm-adobesign-release-local/:_auth=$NPM_AUTH
 email=$NPM_EMAIL
 always-auth=true
 EOF
