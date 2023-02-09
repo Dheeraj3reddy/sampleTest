@@ -30,11 +30,11 @@ else
 fi
 
 # For NPM version 9 or after, _auth in .npmrc is no longer valid. We need to fix it up
-[[ "$(npm --version)" =~ ^([0-9]*)\. ]]; npm_version="${BASH_REMATCH[1]}"
-auth_line=$(grep _auth .npmrc)
-if [[ "$npm_version" -ge 9  && "$auth_line" =~ ^_auth ]]; then
-  npm config fix
-fi
+#[[ "$(npm --version)" =~ ^([0-9]*)\. ]]; npm_version="${BASH_REMATCH[1]}"
+#auth_line=$(grep _auth .npmrc)
+#if [[ "$npm_version" -ge 9  && "$auth_line" =~ ^_auth ]]; then
+#  npm config fix
+#fi
 
 [[ "$auth" =~ email\ *=\ *([[:graph:]]*) ]]; export NPM_EMAIL="${BASH_REMATCH[1]}"
 [[ "$auth" =~ _auth\ *=\ *([[:graph:]]*) ]]; export NPM_AUTH="${BASH_REMATCH[1]}"
@@ -76,7 +76,7 @@ if [[ -n "$PUSH_ARTIFACTS" && -d dist-pub ]]; then
     PUBLISH_REGISTRY=https://artifactory.corp.adobe.com/artifactory/api/npm/npm-adobesign-release-local/
     cat > .npmrc << EOF
 registry=$PUBLISH_REGISTRY
-_auth=$NPM_AUTH
+//artifactory.corp.adobe.com/artifactory/api/npm/npm-adobesign-release-local/:_auth=$NPM_AUTH
 email=$NPM_EMAIL
 always-auth=true
 EOF
