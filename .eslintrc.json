@@ -1,4 +1,9 @@
 {
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "script",
+        "ecmaFeatures": {}
+    },
     "env": {
         "browser": true
     },
