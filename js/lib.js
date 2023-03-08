@@ -22,7 +22,7 @@ function showImageInfo() {
 
   // populate image info
   var imageInfoMsg = UiStrings.getTranslatedString('imageInfoMsg')
-      .replace('{numImages}', images.length);
+    .replace('{numImages}', images.length);
   exampleLib.showImageInfo(imageInfoMsg, '.image-info', images);
 }
 

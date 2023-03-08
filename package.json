@@ -7,7 +7,7 @@
     "clean": "grunt clean-all",
     "build": "grunt build",
     "builddev": "grunt build-dev",
-    "start": "webpack-dev-server",
+    "start": "webpack serve",
     "watch": "webpack --progress --watch",
     "test": "jest",
     "coverage": "jest --coverage",
@@ -28,28 +28,29 @@
     "babel-jest": "^27.1.0",
     "babel-plugin-transform-require-context": "^0.1.1",
     "babel-polyfill": "~6.23.0",
-    "bundle-loader": "~0.5.5",
-    "eslint": "~3.19.0",
-    "eslint-loader": "~1.7.1",
-    "file-loader": "~1.1.5",
-    "grunt": "~1.0.1",
+    "eslint": "^7.32.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.27.5",
+    "file-loader": "^6.2.0",
+    "grunt": "^1.6.1",
     "grunt-contrib-clean": "~1.0.0",
     "grunt-contrib-copy": "~1.0.0",
     "grunt-env": "~0.4.4",
-    "grunt-webpack": "~2.0.1",
+    "grunt-webpack": "^5.0.0",
     "html-loader-jest": "^0.2.1",
     "jest": "^27.2.1",
     "jest-cli": "^27.2.1",
     "load-grunt-tasks": "~3.5.2",
     "phantomjs-prebuilt": "~2.1.14",
     "sonarqube-scanner": "2.5.0",
-    "webpack": "~2.2.1",
-    "webpack-dev-server": "~2.4.2"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "npmlibexample": "2.0.0",
     "es6-promise": "~4.2.6",
     "jquery": "~3.5.1",
+    "npmlibexample": "2.0.0",
     "underscore": "~1.12.1"
   },
   "jest": {
@@ -76,8 +77,7 @@
     ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|md)$": "<rootDir>/test/mocks/file-mock.js",
-      "\\.(css|less)$": "<rootDir>/test/mocks/style-mock.js",
-      "^bundle-loader?.*!\\./(.*)$": "<rootDir>/js/nls/$1"
+      "\\.(css|less)$": "<rootDir>/test/mocks/style-mock.js"
     }
   }
 }

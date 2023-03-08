@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 
 module.exports = {
+  mode: 'production',
   entry: {
     // depending on what your project's entry point javascript file is,
     // you will need to moodify the following line.
@@ -54,21 +55,26 @@ module.exports = {
   },
   devtool  : 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
 
-    // overlay: true captures only errors
-    overlay: {
-      errors: true,
-      warnings: true
+    client: {
+      // overlay: true captures only errors
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
     },
 
     port: 9000,
-    publicPath: '/',
+    static: {
+      directory: path.join(__dirname, 'dist'),
+      publicPath: '/',
+    },
     host: 'secure.local.adobesigncdn.com',
 
     // comment out the following 3 lines if you don't want HTTPS support
-    https: true,
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem')
+    https: {
+      key: fs.readFileSync('key.pem'),
+      cert: fs.readFileSync('cert.pem'),
+    },
   }
 };

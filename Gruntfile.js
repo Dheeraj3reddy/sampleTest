@@ -33,10 +33,10 @@ module.exports = function (grunt) {
       options: webpackConfig,
       build: {
         devtool: 'source-map',
+        optimization: {
+          minimize: true,
+        },
         plugins: [
-          new webpack.optimize.UglifyJsPlugin({
-            compress: {warnings: false}
-          }),
           new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
           })
@@ -44,6 +44,7 @@ module.exports = function (grunt) {
       },
 
       'build-dev': {
+        mode: 'development',
         devtool: 'inline-source-map'
       }
     }

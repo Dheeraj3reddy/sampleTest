@@ -3,7 +3,7 @@
  * for a given key.
  *
  * Performs two functions:
- *  - at compile/bundle time, uses 'bundle-loader' to generate lazy-loadable chunks for each locale.
+ *  - at compile/bundle time, generate lazy-loadable chunks for each locale.
  *  - at run time, provides loadTranslations() method that lazy load locale and helper method to get translated string by key
  */
 
@@ -23,7 +23,7 @@ var loadedTranslations = null;
 function loadTranslations(locale) {
   var loc = (locale === 'en_US') ? 'root' : locale;
   return new Promise(function (resolve) {
-    var bundle = require('bundle-loader?lazy&name=[folder]!./' + loc + '/ui-strings.json');
+    var bundle = require('./' + loc + '/ui-strings.json');
     var resolveBundle = function (jsonBundle) {
       loadedTranslations = jsonBundle;
       resolve(jsonBundle);
